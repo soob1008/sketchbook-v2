@@ -1,5 +1,11 @@
 # sketchbook-v2
-sketchbook V2 - pnpm, turbo, shadcn UI 기반의 모노레포 구조 포트폴리오 사이트
+sketchbook V2 - pnpm, turbo, shadcn UI 기반의 모노레포 구조 프로젝트 - 개발 기록
+
+## 개발 목록
+1. TODO - zustand, redux
+2. 피아노
+3. 게임 - 테트리스, 지뢰찾기
+
 # shadcn/ui monorepo template
 
 This template is for creating a monorepo with shadcn/ui.
