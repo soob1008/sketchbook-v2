@@ -45,7 +45,7 @@ const getMinePosition = () => {
   return mineArr;
 };
 
-// 지뢰 좌표를 보드 값에 넣어주고
+// 지뢰 좌표를 보드 값에 넣어준다.
 const createMineBoard = (): MineBlock[][] => {
   const initBoardArray: MineBlock[][] = Array.from(
     { length: ROW_LENGTH },
