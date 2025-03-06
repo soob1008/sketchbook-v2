@@ -1,7 +1,10 @@
 # 🎨 Sketchbook V2
 
+https://soob1008.github.io/sketchbook-v2/
+
 **Sketchbook V2**는 개발 실험과 아이디어를 기록하는 **Next.js 기반 모노레포 프로젝트**입니다.  
 **pnpm, Turborepo, ShadCN UI**를 활용하여 **효율적인 패키지 관리 및 최신 웹 기술**을 적용했습니다.
+
 
 ## 프로젝트 목표
 - 다양한 최신 웹 기술을 실험하고 적용 <br/>
