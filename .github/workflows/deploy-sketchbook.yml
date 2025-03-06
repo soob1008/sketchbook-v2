@@ -44,7 +44,7 @@ jobs:
         run : |
           cd apps/sketchbook
           pnpm run build
-          mv out ../../public
+          mv out public/sketchbook-v2
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
