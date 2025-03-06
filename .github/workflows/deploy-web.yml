@@ -26,14 +26,15 @@ jobs:
           corepack enable
           pnpm install --frozen-lockfile
 
-      - name: Build Web App
+      - name: Build and Export Web App
         run: |
           cd apps/sketchbook
           pnpm run build
-          mv dist ../public 
+          pnpm run export
+          mv out ../../public 
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: github-pages  # GitHub Pages 브랜치
-          folder: public  # 배포할 폴더
+          branch: github-pages
+          folder: public
