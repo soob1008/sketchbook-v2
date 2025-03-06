@@ -1,0 +1,40 @@
+name: Deploy Web to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 메인 브랜치 변경 시 실행
+    paths:
+      - 'apps/sketchbook/**'  # 웹앱 관련 파일이 변경될 때만 실행
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: Build and Export Web App
+        run: |
+          cd apps/sketchbook
+          pnpm run build
+          pnpm run export
+          mv out ../../public 
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: github-pages
+          folder: public
