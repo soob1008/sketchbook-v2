@@ -146,7 +146,7 @@ const MineSweeperBoard = () => {
           type: 'explodedMine',
         });
       } else {
-        // 누른 곳이 지뢰가 아니면, 주변에 지뢰가 있는지 검사한다. 지뢰가 없으면 오픈 -  openBlock();
+        // 누른 곳이 지뢰가 아니면, 주변에 지뢰가 있는지 검사한다. 지뢰가 없으면 오픈 -  openBlock()
         openBlock(newBoard, x, y);
       }
     } else if (event.button === 2) {
