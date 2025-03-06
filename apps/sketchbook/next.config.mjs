@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ['@workspace/ui'],
-  basePath: '/sketchbook'
+  basePath: '/sketchbook',
+  output: 'export'
 };
 
 export default nextConfig;
