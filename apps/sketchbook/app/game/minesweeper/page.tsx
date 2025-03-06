@@ -220,7 +220,7 @@ const MineSweeperBoard = () => {
       mineCount,
     });
 
-    // 주변에 지뢰가 없으면 주변 블록 열기
+    // 주변에 지뢰가 없으면 주변 블록을 연다.
     if (mineCount === 0) {
       for (let pos of AROUND_POSITIONS) {
         const [posX, posY] = pos;
