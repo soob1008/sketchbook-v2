@@ -38,7 +38,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --filter @workspace/sketchbook...
+        run: pnpm install
 
       - name: Build and Export Sketchbook
         run : |
