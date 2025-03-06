@@ -75,7 +75,7 @@ export default function Piano() {
     osc.stop(now + attackTime + decayTime + releaseTime);
   };
 
-  if (!isClient) return null; // 서버에서 렌더링 방지
+  if (!isClient) return null;
 
   return (
     <>
