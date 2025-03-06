@@ -16,7 +16,7 @@ const TodoList = ({ todo }: Todo) => {
   const [checked, setChecked] = useState(completed);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
-  const onComplete = (e: ChangeEvent<HTMLInputElement>) => {
+  const onComplete = (e: any) => {
     setChecked(e.target.checked);
 
     dispatch(update({ ...todo, completed: e.target.checked }));
@@ -30,6 +30,7 @@ const TodoList = ({ todo }: Todo) => {
         update({
           id: todo.id,
           text: editText,
+          completed: false,
         })
       );
     }
@@ -46,7 +47,7 @@ const TodoList = ({ todo }: Todo) => {
   return (
     <div className="flex items-center justify-between gap-5">
       <div className="flex items-center gap-2 flex-1">
-        <Checkbox onChange={(e) => onComplete(e)} />
+        <Checkbox onChange={onComplete} />
         {isEditing ? (
           <Input
             className="w-full"

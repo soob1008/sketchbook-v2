@@ -54,7 +54,6 @@ const Todo = () => {
           value={text}
         />
         <Button
-          type="primary"
           onClick={onAdd}
           style={{
             borderRadius: '0 3px 3px 0',

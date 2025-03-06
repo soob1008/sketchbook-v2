@@ -60,11 +60,14 @@ const createMineBoard = (): MineBlock[][] => {
         }))
   );
 
-  const minePosition = getMinePosition();
+  const minePosition: number[][] = getMinePosition();
 
   // 보드에 isMine true 넣어주기
   initBoardArray.forEach((row, rowIndex) => {
     row.forEach((cell, cellIndex) => {
+      if (!initBoardArray[rowIndex] || !initBoardArray[rowIndex][cellIndex])
+        return;
+
       for (let pos of minePosition) {
         const { [0]: x, [1]: y } = pos;
 
@@ -93,6 +96,7 @@ const MineSweeperBoard = () => {
     y: number,
     block: MineBlock
   ) => {
+    if (!newBoard[y] || !newBoard[y][x]) return;
     newBoard[y][x] = block;
   };
 
@@ -127,10 +131,12 @@ const MineSweeperBoard = () => {
   const onClickBlock = (event: MouseEvent, x: number, y: number) => {
     event.preventDefault();
     if (gameStatus === 'FAIL') return;
+    if (!board[y] || !board[y][x]) return;
     if (board[y][x].isOpen) return;
     const newBoard = board.map((row) => [...row]);
 
     // 왼쪽 마우스 눌렀을 때
+    if (!newBoard[y] || !newBoard[y][x]) return;
     if (event.button === 0) {
       // 누른 곳이 지뢰면, -> isMine 1, mineCount 0, isOpen 1 - explodedMine
       if (newBoard[y][x].isMine) {
@@ -181,13 +187,11 @@ const MineSweeperBoard = () => {
     for (let pos of AROUND_POSITIONS) {
       const [posX, posY] = pos;
 
-      if (
-        x + posX >= 0 &&
-        y + posY >= 0 &&
-        y + posY < ROW_LENGTH &&
-        x + posX < COL_LENGTH
-      ) {
-        if (board[y + posY][x + posX].isMine) count++;
+      const newX = x + posX;
+      const newY = y + posY;
+
+      if (newY >= 0 && newY < ROW_LENGTH && newX >= 0 && newX < COL_LENGTH) {
+        if (board[newY]?.[newX]?.isMine) count++;
       }
     }
 
@@ -201,8 +205,8 @@ const MineSweeperBoard = () => {
       y < 0 ||
       x >= COL_LENGTH ||
       y >= ROW_LENGTH ||
-      board[y][x].isOpen ||
-      board[y][x].type === 'flag'
+      board[y]?.[x]?.isOpen ||
+      board[y]?.[x]?.type === 'flag'
     )
       return false;
 

@@ -89,7 +89,7 @@ export default function TetrisPage() {
     blockKey: BlockType,
     statusIndex: number
   ): Position[] => {
-    const status: number[][] = BLOCKS[`${blockKey}`].state[statusIndex];
+    const status: number[][] = BLOCKS[`${blockKey}`]?.state[statusIndex] ?? [];
     let positions = Array<Position>();
     status.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
@@ -211,13 +211,10 @@ export default function TetrisPage() {
     blockType: BlockType,
     positions: Position[]
   ) => {
-    const newBoard = board.map((row) => [...row]);
+    const newBoard = board.map((row) => (row ? [...row] : [])); // 🚀 안전한 배열 복사
 
     for (let position of positions) {
       const { x: blockX, y: blockY } = position;
-
-      // board 에는 블럭의 값이 반영이 안되어있어서 현재 블럭 값 넣어줌. - fixToBoard 랑 겹치나?
-      console.log(`position = ${position}`);
 
       newBoard[boardY + blockY][boardX + blockX] = blockType;
     }

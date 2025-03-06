@@ -47,5 +47,4 @@ export const nextJsConfig = [
       "react/prop-types": "off",
     },
   },
-  eslintConfigPrettier,
 ];

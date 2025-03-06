@@ -32,12 +32,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "pnpm"
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
 
-      - name: Install Despendencies
-        run: |
-          corepack enable
-          pnpm install --fronzen-lockfile
+      - name: Install dependencies
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Build and Export Sketchbook
         run : |

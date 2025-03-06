@@ -14,19 +14,20 @@ import {
 import { Volume, VolumeOff } from 'lucide-react';
 import PageTitle from '@/components/ui/title';
 
-const Piano = () => {
+export default function Piano() {
   const [volume, setVolume] = useState<number[]>([0.5]);
   const [prevVolume, setPrevVolume] = useState([0]);
   const [currentFreq, setCurrentFreq] = useState(0);
   const [selectedSong, setSelectedSong] = useState('');
 
   const audioContext = useRef(
-    new (window.AudioContext || window.webkitAudioContext)()
+    new (AudioContext ?? (window as any).webkitAudioContext)()
   ).current;
+
   const gainNode = useRef(audioContext.createGain()).current;
 
   const playPianoTone = (freq: number) => {
-    if (volume <= 0) return;
+    if (volume[0] <= 0) return;
     const osc: OscillatorNode = audioContext.createOscillator();
 
     // Attack-Decay-Sustain-Release (ADSR) envelope 적용
@@ -38,17 +39,17 @@ const Piano = () => {
 
     // Attack
     gainNode.gain.setValueAtTime(0, now);
-    gainNode.gain.linearRampToValueAtTime(volume, now + attackTime);
+    gainNode.gain.linearRampToValueAtTime(volume[0], now + attackTime);
 
     // Decay
     gainNode.gain.linearRampToValueAtTime(
-      volume * sustainLevel,
+      volume[0] * sustainLevel,
       now + attackTime + decayTime
     );
 
     // Sustain (유지)
     gainNode.gain.setValueAtTime(
-      volume * sustainLevel,
+      volume[0] * sustainLevel,
       now + attackTime + decayTime
     );
 
@@ -129,7 +130,7 @@ const Piano = () => {
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-3">
           <button style={{ marginRight: 5 }} onClick={onClickVolume}>
-            {volume > 0 ? <Volume /> : <VolumeOff />}
+            {volume[0] > 0 ? <Volume /> : <VolumeOff />}
           </button>
           <Slider
             min={0}
@@ -187,32 +188,4 @@ const Piano = () => {
       </div>
     </>
   );
-};
-
-export default Piano;
-
-// const PianoKey = styled('button')<{ isActive: boolean }>(({ isActive }) => ({
-//   '&.white': {
-//     width: '32px',
-//     height: '100px',
-//     backgroundColor: isActive ? 'dodgerblue' : '#ffffff',
-//     borderLeft: '1px solid #e2e2e2',
-//     '&:active': {
-//       backgroundColor: 'dodgerblue',
-//     },
-//   },
-//   '&.black': {
-//     position: 'relative',
-//     zIndex: 10,
-//     display: 'block',
-//     margin: '0 -7px',
-//     width: '20px',
-//     height: '60px',
-//     backgroundColor: isActive ? 'red' : '#000000',
-//
-//     borderRadius: '0 0 2px 2px',
-//     '&:active': {
-//       backgroundColor: 'red',
-//     },
-//   },
-// }));
+}

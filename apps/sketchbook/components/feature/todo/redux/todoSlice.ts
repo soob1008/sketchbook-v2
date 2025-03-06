@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 
 export type TodoData = {
@@ -19,25 +19,26 @@ export const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {
-    insert: (state, action) => {
-      state.todos = [
-        {
-          id: Date.now(),
-          text: action.payload,
-          completed: false,
-        },
-        ...state.todos,
-      ];
+    insert: (state, action: PayloadAction<string>) => {
+      state.todos.unshift({
+        id: Date.now(),
+        text: action.payload,
+        completed: false,
+      });
     },
-    remove: (state, action) => {
+    remove: (state, action: PayloadAction<number>) => {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload);
     },
-    update: (state, action) => {
+    update: (
+      state,
+      action: PayloadAction<{ id: number; text: string; completed: boolean }>
+    ) => {
       const { id, text, completed } = action.payload;
-
-      state.todos = state.todos.map((todo) =>
-        todo.id === id ? { ...todo, text, completed } : todo
-      );
+      const todo = state.todos.find((t) => t.id === id);
+      if (todo) {
+        todo.text = text;
+        todo.completed = completed;
+      }
     },
   },
 });

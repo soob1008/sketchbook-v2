@@ -2,7 +2,7 @@
 const nextConfig = {
   transpilePackages: ['@workspace/ui'],
   basePath: '/sketchbook',
-  output: 'export'
+  output: 'export',
 };
 
 export default nextConfig;
