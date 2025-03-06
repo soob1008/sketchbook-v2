@@ -21,6 +21,11 @@ export default function TetrisPage() {
   const [block, setBlock] = useState<BlockStatus>(createBlock());
   const [isPlaying, setPlaying] = useState(true);
   const [time, setTime] = useState(0);
+  const [isClient, setIsClient] = useState(false)
+  
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -195,7 +200,6 @@ export default function TetrisPage() {
       setPlaying(false);
     } else {
       setBlock(createdBlock);
-      console.log('블럭 생성 --');
     }
   };
 
@@ -207,7 +211,6 @@ export default function TetrisPage() {
     positions: Position[]
   ) => {
     const newBoard = board.map((row) => [...row]);
-    // let currentBoardY: number[] = [];
 
     for (let position of positions) {
       const { x: blockX, y: blockY } = position;
@@ -216,10 +219,6 @@ export default function TetrisPage() {
       console.log(`position = ${position}`);
 
       newBoard[boardY + blockY][boardX + blockX] = blockType;
-
-      // if (!currentBoardY.includes(boardY + blockY)) {
-      //   currentBoardY.push(boardY + blockY);
-      // }
     }
 
     for (let y = newBoard.length - 1; y >= 0; y--) {
@@ -304,9 +303,11 @@ export default function TetrisPage() {
     return true;
   };
 
+  if(!isClient) return;
+
   return (
     <div className="relative flex">
-      <div className="w-[350px] border">
+      <div className="w-[350px] border border-gray-400 box-content">
         {board.map((row, rowIndex) => (
           <div
             key={`board-row-${rowIndex}`}
@@ -330,21 +331,13 @@ export default function TetrisPage() {
 
               return (
                 <div
-                  key={`board-cell-${colIndex}`}
-                  className={`flex w-[35px] h-[35px] border border-[#e2e2e2]`}
+                  key={`board-cell-${rowIndex}-${colIndex}`}
+                  className={`flex w-[35px] h-[35px]`}
                   style={{
-                    borderWidth: boardValue ? '4px' : '1px',
-                    borderStyle: boardValue ? 'outset' : 'solid',
-                    backgroundColor: boardValue
-                      ? BLOCKS[boardValue].color
-                      : '#f2f2f2',
-                    borderColor: boardValue
-                      ? BLOCKS[boardValue].color
-                      : '#e2e2e2',
+                    border: boardValue ? `4px outset ${BLOCKS[boardValue]?.color}` : '1px solid #f1f1f1',
+                    backgroundColor: BLOCKS[boardValue]?.color || '#fff',
                   }}
-                >
-                  {boardValue ? '' : boardValue}
-                </div>
+                />
               );
             })}
           </div>
@@ -358,7 +351,7 @@ export default function TetrisPage() {
           <span>{dayjs.duration(time, 'seconds').format('HH:mm:ss')}</span>
         </div>
         <Button
-          className="mt-8 px-6 py-3 bg-white font-bold border border-gray-300 shadow-sm text-[#000]"
+          className="mt-8 px-6 py-3 bg-white font-bold border border-gray-300 shadow-sm text-[#000] hover:bg-gray-100"
           onClick={playStart}
         >
           Play Again

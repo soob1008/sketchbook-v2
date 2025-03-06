@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import { Slider } from '@workspace/ui/components/slider';
 import { Button } from '@workspace/ui/components/button';
-import { Duration, getDuration, PIANO_KEYS, SONGS } from '@/utils/piano';
+import { Duration, getDuration, PIANO_KEYS, SONGS } from '@/lib/piano';
 import {
   Select,
   SelectContent,
