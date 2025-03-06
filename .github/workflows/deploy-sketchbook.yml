@@ -44,7 +44,6 @@ jobs:
         run : |
           cd apps/sketchbook
           pnpm run build
-          pnpm run export
           mv out ../../public
 
       - name: Upload artifact
