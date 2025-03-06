@@ -16,7 +16,9 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="py-10 items-center justify-center text-black text-2xl font-bold">
-        <h1>SUBIN</h1>
+        <h1>
+          <Link href="/">SUBIN</Link>
+        </h1>
       </SidebarHeader>
       <SidebarContent>
         {MENU_ITEMS.map((group) => (
