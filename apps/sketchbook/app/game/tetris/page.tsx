@@ -11,6 +11,7 @@ import {
   Position,
 } from '@/lib/tetris';
 import { Button } from '@workspace/ui/components/button';
+import PageTitle from '@/components/ui/title';
 
 dayjs.extend(duration);
 
@@ -21,11 +22,11 @@ export default function TetrisPage() {
   const [block, setBlock] = useState<BlockStatus>(createBlock());
   const [isPlaying, setPlaying] = useState(true);
   const [time, setTime] = useState(0);
-  const [isClient, setIsClient] = useState(false)
-  
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -303,70 +304,75 @@ export default function TetrisPage() {
     return true;
   };
 
-  if(!isClient) return;
+  if (!isClient) return;
 
   return (
-    <div className="relative flex">
-      <div className="w-[350px] border border-gray-400 box-content">
-        {board.map((row, rowIndex) => (
-          <div
-            key={`board-row-${rowIndex}`}
-            className="flex items-center justify-center"
-          >
-            {row.map((boardCell, colIndex) => {
-              const positions = getBlockPositions(
-                block.blockType,
-                block.blockIndex
-              ).map((it) => ({
-                x: it.x + block.position.x,
-                y: it.y + block.position.y,
-              }));
+    <>
+      <PageTitle title="테트리스" />
+      <div className="relative flex">
+        <div className="w-[350px] border border-gray-400 box-content">
+          {board.map((row, rowIndex) => (
+            <div
+              key={`board-row-${rowIndex}`}
+              className="flex items-center justify-center"
+            >
+              {row.map((boardCell, colIndex) => {
+                const positions = getBlockPositions(
+                  block.blockType,
+                  block.blockIndex
+                ).map((it) => ({
+                  x: it.x + block.position.x,
+                  y: it.y + block.position.y,
+                }));
 
-              const isBlock = positions.find(
-                (it) => it.y === rowIndex && it.x === colIndex
-              );
-              const boardValue = isBlock
-                ? block.blockType
-                : board[rowIndex][colIndex];
+                const isBlock = positions.find(
+                  (it) => it.y === rowIndex && it.x === colIndex
+                );
+                const boardValue = isBlock
+                  ? block.blockType
+                  : board[rowIndex][colIndex];
 
-              return (
-                <div
-                  key={`board-cell-${rowIndex}-${colIndex}`}
-                  className={`flex w-[35px] h-[35px]`}
-                  style={{
-                    border: boardValue ? `4px outset ${BLOCKS[boardValue]?.color}` : '1px solid #f1f1f1',
-                    backgroundColor: BLOCKS[boardValue]?.color || '#fff',
-                  }}
-                />
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* Info Section */}
-      <div className="ml-8">
-        <div>
-          <h2 className="mb-4 text-lg font-bold">TIME</h2>
-          <span>{dayjs.duration(time, 'seconds').format('HH:mm:ss')}</span>
+                return (
+                  <div
+                    key={`board-cell-${rowIndex}-${colIndex}`}
+                    className={`flex w-[35px] h-[35px]`}
+                    style={{
+                      border: boardValue
+                        ? `4px outset ${BLOCKS[boardValue]?.color}`
+                        : '1px solid #f1f1f1',
+                      backgroundColor: BLOCKS[boardValue]?.color || '#fff',
+                    }}
+                  />
+                );
+              })}
+            </div>
+          ))}
         </div>
-        <Button
-          className="mt-8 px-6 py-3 bg-white font-bold border border-gray-300 shadow-sm text-[#000] hover:bg-gray-100"
-          onClick={playStart}
-        >
-          Play Again
-        </Button>
-      </div>
 
-      {/* Game Over Modal */}
-      {!isPlaying && (
-        <div className="fixed flex flex-col items-center justify-center w-1/2 h-1/2 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 text-white">
-          <b className="text-lg">Game Over</b>
-          <Button className="mt-2" onClick={playStart}>
+        {/* Info Section */}
+        <div className="ml-8">
+          <div>
+            <h2 className="mb-4 text-lg font-bold">TIME</h2>
+            <span>{dayjs.duration(time, 'seconds').format('HH:mm:ss')}</span>
+          </div>
+          <Button
+            className="mt-8 px-6 py-3 bg-white font-bold border border-gray-300 shadow-sm text-[#000] hover:bg-gray-100"
+            onClick={playStart}
+          >
             Play Again
           </Button>
         </div>
-      )}
-    </div>
+
+        {/* Game Over Modal */}
+        {!isPlaying && (
+          <div className="fixed flex flex-col items-center justify-center w-1/2 h-1/2 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/50 text-white">
+            <b className="text-lg">Game Over</b>
+            <Button className="mt-2" onClick={playStart}>
+              Play Again
+            </Button>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

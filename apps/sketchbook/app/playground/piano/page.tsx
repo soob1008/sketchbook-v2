@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@workspace/ui/components/select';
 import { Volume, VolumeOff } from 'lucide-react';
+import PageTitle from '@/components/ui/title';
 
 const Piano = () => {
   const [volume, setVolume] = useState<number[]>([0.5]);
@@ -124,7 +125,7 @@ const Piano = () => {
 
   return (
     <>
-      <h2 className="mb-2 text-xl font-bold">Piano</h2>
+      <PageTitle title="Piano" />
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-3">
           <button style={{ marginRight: 5 }} onClick={onClickVolume}>

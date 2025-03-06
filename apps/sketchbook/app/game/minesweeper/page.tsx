@@ -1,14 +1,21 @@
 'use client';
 
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent } from 'react';
 import { Frown, Laugh, PartyPopper, Bomb, Flag } from 'lucide-react';
-import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
-import {AROUND_POSITIONS, COL_LENGTH, GameStatus, MINE_COUNT, MineType, ROW_LENGTH} from "@/lib/minesweeper";
-import useInterval from "@/hooks/useInterval";
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import {
+  AROUND_POSITIONS,
+  COL_LENGTH,
+  GameStatus,
+  MINE_COUNT,
+  MineType,
+  ROW_LENGTH,
+} from '@/lib/minesweeper';
+import useInterval from '@/hooks/useInterval';
+import PageTitle from '@/components/ui/title';
 
 dayjs.extend(duration);
-
 
 interface MineBlock {
   type: MineType;
@@ -27,7 +34,7 @@ const getMinePosition = () => {
     const y = Math.floor(Math.random() * ROW_LENGTH);
 
     const included = mineArr.some(
-      (minePos) => JSON.stringify(minePos) === JSON.stringify([x, y]),
+      (minePos) => JSON.stringify(minePos) === JSON.stringify([x, y])
     );
 
     if (!included) {
@@ -46,11 +53,11 @@ const createMineBoard = (): MineBlock[][] => {
       Array(COL_LENGTH)
         .fill({} as MineBlock)
         .map((_: MineBlock, colIndex) => ({
-          type: "inVisible",
+          type: 'inVisible',
           isOpen: false,
           isMine: false,
           mineCount: 0,
-        })),
+        }))
   );
 
   const minePosition = getMinePosition();
@@ -77,14 +84,14 @@ const createMineBoard = (): MineBlock[][] => {
 const MineSweeperBoard = () => {
   const [board, setBoard] = useState<MineBlock[][]>(() => createMineBoard());
   const [remainFlag, setRemainFlag] = useState(MINE_COUNT);
-  const [gameStatus, setGameStatus] = useState<GameStatus>("CONTINUE");
+  const [gameStatus, setGameStatus] = useState<GameStatus>('CONTINUE');
   const [time, setTime] = useState(0);
 
   const setMineBlockToBoard = (
     newBoard: MineBlock[][],
     x: number,
     y: number,
-    block: MineBlock,
+    block: MineBlock
   ) => {
     newBoard[y][x] = block;
   };
@@ -94,7 +101,7 @@ const MineSweeperBoard = () => {
     for (let row of board) {
       for (let cell of row) {
         if (cell.isMine && cell.isOpen) {
-          return "FAIL";
+          return 'FAIL';
         }
 
         if (!cell.isMine && !cell.isOpen) {
@@ -104,22 +111,22 @@ const MineSweeperBoard = () => {
     }
 
     if (closeCount > 0) {
-      return "CONTINUE";
+      return 'CONTINUE';
     }
 
-    return "SUCCESS";
+    return 'SUCCESS';
   };
 
   useInterval(
     () => {
       setTime(time + 1);
     },
-    gameStatus === "FAIL" || gameStatus === "SUCCESS" ? null : 1000,
+    gameStatus === 'FAIL' || gameStatus === 'SUCCESS' ? null : 1000
   );
 
   const onClickBlock = (event: MouseEvent, x: number, y: number) => {
     event.preventDefault();
-    if (gameStatus === "FAIL") return;
+    if (gameStatus === 'FAIL') return;
     if (board[y][x].isOpen) return;
     const newBoard = board.map((row) => [...row]);
 
@@ -130,24 +137,24 @@ const MineSweeperBoard = () => {
         setMineBlockToBoard(newBoard, x, y, {
           ...newBoard[y][x],
           isOpen: true,
-          type: "explodedMine",
+          type: 'explodedMine',
         });
       } else {
         // 누른 곳이 지뢰가 아니면, 주변에 지뢰가 있는지 검사한다. 지뢰가 없으면 오픈 -  openBlock();
         openBlock(newBoard, x, y);
       }
     } else if (event.button === 2) {
-      if (remainFlag > 0 && newBoard[y][x].type === "inVisible") {
+      if (remainFlag > 0 && newBoard[y][x].type === 'inVisible') {
         setMineBlockToBoard(newBoard, x, y, {
           ...newBoard[y][x],
-          type: "flag",
+          type: 'flag',
         });
 
         setRemainFlag((prev) => prev - 1);
-      } else if (newBoard[y][x].type === "flag") {
+      } else if (newBoard[y][x].type === 'flag') {
         setMineBlockToBoard(newBoard, x, y, {
           ...newBoard[y][x],
-          type: "inVisible",
+          type: 'inVisible',
         });
 
         setRemainFlag((prev) => prev + 1);
@@ -164,7 +171,7 @@ const MineSweeperBoard = () => {
   const onClickStart = () => {
     setBoard(createMineBoard());
     setRemainFlag(MINE_COUNT);
-    setGameStatus("CONTINUE");
+    setGameStatus('CONTINUE');
     setTime(0);
   };
 
@@ -195,7 +202,7 @@ const MineSweeperBoard = () => {
       x >= COL_LENGTH ||
       y >= ROW_LENGTH ||
       board[y][x].isOpen ||
-      board[y][x].type === "flag"
+      board[y][x].type === 'flag'
     )
       return false;
 
@@ -203,7 +210,7 @@ const MineSweeperBoard = () => {
     const mineCount = getMineCount(board, x, y);
 
     setMineBlockToBoard(board, x, y, {
-      type: "visible",
+      type: 'visible',
       isOpen: true,
       isMine: false,
       mineCount,
@@ -222,93 +229,88 @@ const MineSweeperBoard = () => {
   };
 
   return (
-    <div className="overflow-hidden relative inline-block p-[20px] rounded-sm bg-[#c2d5ff]">
-      <h3 className="text-lg font-bold">Minesweeper - 초급</h3>
-      <div className="flex justify-between items-center my-5">
-        <span className="">Flag: {remainFlag}</span>
-        <button
-          onClick={onClickStart}
-          className="flex items-center justify-center p-2 rounded-sm"
-          style={{
-            ...getMineButtonColor(gameStatus)
-          }}
-        >
-          {gameStatus === "FAIL" && <Frown/>}
-          {gameStatus === "CONTINUE" && <Laugh/>}
-          {gameStatus === "SUCCESS" && <PartyPopper/>}
-        </button>
-        <span className="time">
-          {dayjs.duration(time, "seconds").format("HH:mm:ss")}
-        </span>
-      </div>
-      {board.map((row, rowIndex) => (
-        <div key={`mine-row-${rowIndex}`} className="flex">
-          {row.map((cell, cellIndex) => {
-            const { type, mineCount } = cell;
-
-            return (
-              <button
-                key={`block-${cellIndex}`}
-                // blockType={cell.type as MineType}
-                // mineCount={mineCount}
-                className="flex justify-center items-center w-[35px] h-[35px] m-[1px] rounded-sm outline-none border-none"
-                  style={{
-                    backgroundColor: getBlockColor(cell.type)
-                  }}
-                onClick={(e) => onClickBlock(e, cellIndex, rowIndex)}
-                onContextMenu={(e) => onClickBlock(e, cellIndex, rowIndex)}
-              >
-                {mineCount > 0 && mineCount}
-                {(type === "mine" || type === "explodedMine") && (
-                  <Bomb />
-                )}
-                {(type === "flag" || type === "explodedFlag") && (
-                  <Flag />
-                )}
-              </button>
-            );
-          })}
+    <>
+      <PageTitle title="지뢰찾기" />
+      <div className="overflow-hidden relative inline-block p-[20px] rounded-sm bg-[#c2d5ff]">
+        <h3 className="text-lg font-bold">Minesweeper - 초급</h3>
+        <div className="flex justify-between items-center my-5">
+          <span className="">Flag: {remainFlag}</span>
+          <button
+            onClick={onClickStart}
+            className="flex items-center justify-center p-2 rounded-sm"
+            style={{
+              ...getMineButtonColor(gameStatus),
+            }}
+          >
+            {gameStatus === 'FAIL' && <Frown />}
+            {gameStatus === 'CONTINUE' && <Laugh />}
+            {gameStatus === 'SUCCESS' && <PartyPopper />}
+          </button>
+          <span className="time">
+            {dayjs.duration(time, 'seconds').format('HH:mm:ss')}
+          </span>
         </div>
-      ))}
-    </div>
+        {board.map((row, rowIndex) => (
+          <div key={`mine-row-${rowIndex}`} className="flex">
+            {row.map((cell, cellIndex) => {
+              const { type, mineCount } = cell;
+
+              return (
+                <button
+                  key={`block-${cellIndex}`}
+                  // blockType={cell.type as MineType}
+                  // mineCount={mineCount}
+                  className="flex justify-center items-center w-[35px] h-[35px] m-[1px] rounded-sm outline-none border-none"
+                  style={{
+                    backgroundColor: getBlockColor(cell.type),
+                  }}
+                  onClick={(e) => onClickBlock(e, cellIndex, rowIndex)}
+                  onContextMenu={(e) => onClickBlock(e, cellIndex, rowIndex)}
+                >
+                  {mineCount > 0 && mineCount}
+                  {(type === 'mine' || type === 'explodedMine') && <Bomb />}
+                  {(type === 'flag' || type === 'explodedFlag') && <Flag />}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
 export default MineSweeperBoard;
 
-
-
-
-
 const getBlockColor = (type: MineType) => {
   switch (type) {
-    case "inVisible":
-      return "#031349";
-    case "visible":
-    case "mine":
-      return "#e2e2e2";
-    case "explodedMine":
-    case "explodedFlag":
-      return "red";
-    case "flag":
-      return "orange";
+    case 'inVisible':
+      return '#031349';
+    case 'visible':
+    case 'mine':
+      return '#e2e2e2';
+    case 'explodedMine':
+    case 'explodedFlag':
+      return 'red';
+    case 'flag':
+      return 'orange';
   }
 };
 
 const getMineButtonColor = (status: GameStatus) => {
   switch (status) {
-    case "FAIL":
+    case 'FAIL':
       return {
-        backgroundColor: "#eeff1f",
+        backgroundColor: '#eeff1f',
       };
-    case "CONTINUE":
+    case 'CONTINUE':
       return {
-        backgroundColor: "#ffffff",
+        backgroundColor: '#ffffff',
       };
-    case "SUCCESS":
+    case 'SUCCESS':
       return {
-        backgroundColor: "#0072ff",
-        color: "#ffffff",
+        backgroundColor: '#0072ff',
+        color: '#ffffff',
       };
   }
 };
