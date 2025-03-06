@@ -3,14 +3,14 @@
 import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import TodoList from './TodoList';
 import { useSelector, useDispatch } from 'react-redux';
-import { insert, TodoData, Todos } from './todoSlice';
+import { insert, selectTodos, TodoData } from './todoSlice';
 import dayjs from 'dayjs';
 import { Input } from '@workspace/ui/components/input';
 import { Button } from '@workspace/ui/components/button';
 
 const Todo = () => {
   const [text, setText] = useState('');
-  const todos = useSelector(Todos);
+  const todos = useSelector(selectTodos);
   const dispatch = useDispatch();
   const [time, setTime] = useState(dayjs().format('HH:mm:ss'));
 
