@@ -9,7 +9,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@workspace/ui/components/sidebar';
-import { Calendar, Pickaxe, Inbox, LucideIcon } from 'lucide-react';
+import {
+  Calendar,
+  Pickaxe,
+  Inbox,
+  LucideIcon,
+  TicketsPlane,
+} from 'lucide-react';
 import Link from 'next/link';
 
 export function AppSidebar() {
@@ -113,9 +119,9 @@ const MENU_ITEMS: SideBarMenu[] = [
     title: 'Service',
     subMenu: [
       {
-        title: '여행 추천',
-        url: '#',
-        icon: Inbox,
+        title: 'AI 여행지 추천',
+        url: '/service/travel',
+        icon: TicketsPlane,
       },
     ],
   },

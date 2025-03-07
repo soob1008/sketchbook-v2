@@ -1,6 +1,8 @@
+import { ReactElement } from 'react';
+
 interface PageTitleProps {
   title: string;
-  description?: string;
+  description?: string | ReactElement;
   isBottomLine?: boolean;
 }
 
@@ -15,7 +17,7 @@ export default function PageTitle({
     >
       <h2 className=" text-xl font-bold">{title}</h2>
       {description && (
-        <span className="mt-[2px] text-sm text-gray-500">{description}</span>
+        <p className="mt-2 text-sm text-gray-500">{description}</p>
       )}
     </div>
   );

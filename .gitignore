@@ -6,8 +6,8 @@ node_modules
 .pnp.js
 
 # Local env files
-.env
-.env.local
+apps/sketchbook/.env.local
+apps/sketchbook/.env
 .env.development.local
 .env.test.local
 .env.production.local

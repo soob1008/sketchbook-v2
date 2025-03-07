@@ -7,6 +7,7 @@ import {
   SidebarTrigger,
 } from '@workspace/ui/components/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
+import { Toaster } from '@workspace/ui/components/sonner';
 
 const fontSans = Geist({
   subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function RootLayout({
               <SidebarTrigger className="fixed" />
               <div className="py-20 px-10">{children}</div>
             </main>
+            <Toaster position="top-center" richColors />
           </SidebarProvider>
         </Providers>
       </body>
