@@ -1,6 +1,6 @@
 # 🎨 Sketchbook V2
 
-https://soob1008.github.io/sketchbook-v2/
+https://sketchbook-v2.vercel.app/
 
 **Sketchbook V2**는 개발 실험과 아이디어를 기록하는 **Next.js 기반 모노레포 프로젝트**입니다.  
 **pnpm, Turborepo, ShadCN UI**를 활용하여 **효율적인 패키지 관리 및 최신 웹 기술**을 적용했습니다.
@@ -26,12 +26,15 @@ https://soob1008.github.io/sketchbook-v2/
 
 ## 📁 프로젝트 메뉴 구성
 ### 🎡 Playground
-- 🎹 **피아노** - Web Audio API를 활용한 가상 피아노
-- ✅ **투두리스트** - `Redux` & `Zustand` 상태 관리 테스트
+- **피아노** - Web Audio API를 활용한 가상 피아노
+- **투두리스트** - `Redux` & `Zustand` 상태 관리 테스트
 
 ### 🎮 Game
-- 🧩 **테트리스** 
-- 💣 **지뢰찾기** 
+- **테트리스** 
+- **지뢰찾기**
+
+### 🎮 Service
+- **AI 여행지 추천** - chatGPT (openai)
 
 ---
 
@@ -39,7 +42,6 @@ https://soob1008.github.io/sketchbook-v2/
 - **Frontend**: Next.js, TypeScript
 - **모노레포 관리**: pnpm, Turborepo
 - **UI 라이브러리**: ShadCN UI (Tailwind 기반)
-- **상태 관리**: Redux Toolkit, Zustand
 
 ---
 
