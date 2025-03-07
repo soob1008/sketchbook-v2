@@ -3,7 +3,7 @@
 import PageTitle from '@/components/ui/title';
 import { Input } from '@workspace/ui/components/input';
 import { Button } from '@workspace/ui/components/button';
-import { FormProvider, Resolver, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { fetchData } from '@/lib/api/apiClient';
 import { Loader2 } from 'lucide-react';
@@ -12,30 +12,16 @@ type FormValues = {
   message: string;
 };
 
-const resolver: Resolver<FormValues> = async (values) => {
-  return {
-    values: values.message ? values : {},
-    errors: !values.message
-      ? {
-          firstName: {
-            type: 'required',
-            message: 'This is required.',
-          },
-        }
-      : {},
-  };
-};
-
 export default function TravelPage() {
   const form = useForm<FormValues>({
     defaultValues: {
       message: '',
     },
-    resolver,
   });
   const {
     register,
     getValues,
+    watch,
     formState: { isValid },
   } = form;
   const [recommendation, setRecommendation] = useState('');
@@ -81,7 +67,10 @@ export default function TravelPage() {
               {...register('message')}
               placeholder="예) 유럽 소도시 추천해줘"
             />
-            <Button disabled={!isValid} onClick={handleSubmitRecommend}>
+            <Button
+              disabled={!watch('message')}
+              onClick={handleSubmitRecommend}
+            >
               여행지 추천 받기
             </Button>
           </div>
