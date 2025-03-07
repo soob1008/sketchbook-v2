@@ -40,6 +40,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --recursive
 
+      - name: Debug Environment Variables
+        run: echo "OPENAI_API_KEY is set"
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
       - name: Build and Export Sketchbook
         run : |
           cd apps/sketchbook
