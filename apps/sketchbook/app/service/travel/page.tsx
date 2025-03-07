@@ -31,7 +31,7 @@ export default function TravelPage() {
     setIsLoading(true);
     const { message } = getValues();
 
-    const { status, data } = await fetchData('/sketchbook-v2/api/recommend', {
+    const { status, data } = await fetchData('/api/recommend', {
       method: 'POST',
       body: {
         message,
