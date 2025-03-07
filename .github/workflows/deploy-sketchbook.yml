@@ -41,15 +41,15 @@ jobs:
         run: pnpm install --recursive
 
       - name: Debug Environment Variables
-        run: echo "OPENAI_API_KEY is set"
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}"
 
       - name: Build and Export Sketchbook
         run : |
           cd apps/sketchbook
           pnpm run build
           mv out ../../public
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
