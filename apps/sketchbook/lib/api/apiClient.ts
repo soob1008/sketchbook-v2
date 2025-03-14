@@ -3,7 +3,7 @@
 import { toast } from 'sonner';
 
 interface FetchDataRequest {
-  method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
+  method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: unknown;
   headers?: Record<string, string>;
   token?: string;
