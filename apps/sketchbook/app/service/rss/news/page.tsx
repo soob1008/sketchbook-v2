@@ -8,7 +8,9 @@ export default async function RssNewsPage() {
   const { data } = await fetchData('/api/rss/news', {
     method: 'GET',
   });
-  const { feeds, siteTitle, lastBuildDate } = data as Feeds;
+
+  if (!data) return;
+  const { siteTitle, lastBuildDate, feeds } = data as Feeds;
 
   return (
     <>

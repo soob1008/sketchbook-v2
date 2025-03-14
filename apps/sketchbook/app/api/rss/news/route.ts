@@ -28,7 +28,7 @@ export async function GET() {
     return NextResponse.json({
       siteTitle: feed.title,
       lastBuildDate: feed.lastBuildDate,
-      feeds: feed.items,
+      feeds: feed.items || [],
     });
   } catch (error) {
     console.error('Error fetching RSS feed:', error);

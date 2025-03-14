@@ -3,7 +3,7 @@
 import { toast } from 'sonner';
 
 interface FetchDataRequest {
-  method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
+  method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: unknown;
   headers?: Record<string, string>;
   token?: string;
@@ -11,9 +11,9 @@ interface FetchDataRequest {
 
 export async function fetchData(
   endpoint: string,
-  { method = 'GET', body, headers, token }: FetchDataRequest = {}
+  { method = 'GET', body, headers, token }: FetchDataRequest
 ) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
   const url = `${apiUrl}${endpoint}`;
 
   const defaultHeaders = {
