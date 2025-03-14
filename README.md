@@ -42,7 +42,6 @@ https://sketchbook-v2.vercel.app/
 - **Frontend**: Next.js, TypeScript
 - **모노레포 관리**: pnpm, Turborepo
 - **UI 라이브러리**: ShadCN UI (Tailwind 기반)
-
 ---
 
 ## 📌 설치 및 실행
