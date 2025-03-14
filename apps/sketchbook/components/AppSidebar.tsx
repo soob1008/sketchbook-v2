@@ -15,6 +15,7 @@ import {
   Inbox,
   LucideIcon,
   TicketsPlane,
+  Newspaper,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -122,6 +123,11 @@ const MENU_ITEMS: SideBarMenu[] = [
         title: 'AI 여행지 추천',
         url: '/service/travel',
         icon: TicketsPlane,
+      },
+      {
+        title: 'Geek news - RSS',
+        url: '/service/rss/news',
+        icon: Newspaper,
       },
     ],
   },
