@@ -13,7 +13,7 @@ export async function fetchData(
   endpoint: string,
   { method = 'GET', body, headers, token }: FetchDataRequest
 ) {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
   const url = `${apiUrl}${endpoint}`;
 
   const defaultHeaders = {
