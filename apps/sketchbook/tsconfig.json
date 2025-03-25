@@ -22,5 +22,11 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
+  "paths": {
+    "components": "./components/*",
+    "public": "./public/*",
+    "lib": "./lib/*",
+    "api": "./app/api/*"
+  },
   "exclude": ["node_modules"]
 }
