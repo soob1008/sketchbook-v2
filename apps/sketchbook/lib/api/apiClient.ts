@@ -11,7 +11,7 @@ interface FetchDataRequest {
 
 export async function fetchData(
   endpoint: string,
-  { method = 'GET', body, headers, token }: FetchDataRequest
+  { method = 'GET', body, headers, token }?: FetchDataRequest = {}
 ) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
   const url = `${apiUrl}${endpoint}`;
@@ -23,7 +23,7 @@ export async function fetchData(
   };
 
   const options = {
-    method,
+    method: method || 'GET',
     headers: defaultHeaders,
     ...(body ? { body: JSON.stringify(body) } : {}),
   };

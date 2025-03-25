@@ -7,6 +7,7 @@ import { insert, selectTodos, TodoData } from './todoSlice';
 import dayjs from 'dayjs';
 import { Input } from '@workspace/ui/components/input';
 import { Button } from '@workspace/ui/components/button';
+import { fetchData } from '@/lib/api/apiClient';
 
 const Todo = () => {
   const [text, setText] = useState('');
@@ -15,6 +16,11 @@ const Todo = () => {
   const [time, setTime] = useState(dayjs().format('HH:mm:ss'));
 
   useEffect(() => {
+    (async () => {
+      const res = await fetchData('/api/users');
+      console.log('user', res);
+    })();
+
     const intervalId = setInterval(() => {
       setTime(dayjs().format('HH:mm:ss'));
     }, 1000);
