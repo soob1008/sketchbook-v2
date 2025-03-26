@@ -24,20 +24,16 @@ https://sketchbook-v2.vercel.app/
 
 ---
 
-## 📁 프로젝트 메뉴 구성
-### 🎡 Playground
+## 프로젝트 메뉴 구성
+### Playground
 - **피아노** - Web Audio API를 활용한 가상 피아노
 - **투두리스트** - `Redux` & `Zustand` 상태 관리 테스트
 
-### 🎮 Game
+### Game
 - **테트리스** 
 - **지뢰찾기**
 
-### 🎮 Service
-## 🎮 Service
-
----
-
+### Service
 ### 🚀 AI 여행지 추천
 
 - **기술 스택**: OpenAI ChatGPT API
