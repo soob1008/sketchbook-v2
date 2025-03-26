@@ -35,6 +35,9 @@ https://sketchbook-v2.vercel.app/
 
 ### 🎮 Service
 - **AI 여행지 추천** - chatGPT (openai)
+- **Geek news RSS**
+- **지하철 혼잡도와 유동인구 흐름도**
+  - 서울시 공공데이터를 기반으로 D3.js를 활용해 혼잡도 정보를 제공합니다.
 
 ---
 
@@ -42,6 +45,7 @@ https://sketchbook-v2.vercel.app/
 - **Frontend**: Next.js, TypeScript
 - **모노레포 관리**: pnpm, Turborepo
 - **UI 라이브러리**: ShadCN UI (Tailwind 기반)
+- **데이터 시각화**: D3.js
 ---
 
 ## 📌 설치 및 실행
