@@ -16,6 +16,7 @@ import {
   LucideIcon,
   TicketsPlane,
   Newspaper,
+  Train,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -128,6 +129,11 @@ const MENU_ITEMS: SideBarMenu[] = [
         title: 'Geek news - RSS',
         url: '/service/rss/news',
         icon: Newspaper,
+      },
+      {
+        title: '지하철 혼잡도 & 유동인구 흐름도',
+        url: '/service/subway_jam',
+        icon: Train,
       },
     ],
   },

@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
       return (
         String(item['호선']) === line &&
         item['요일구분'] === dateType &&
-        `${item['출발역']} ${item['상하구분']}` === station
+        item['출발역'] === station
       );
     });
 

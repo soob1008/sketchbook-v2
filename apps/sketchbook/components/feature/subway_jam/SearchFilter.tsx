@@ -7,20 +7,19 @@ import {
 } from '@workspace/ui/components/select';
 import { SUBWAY_LINE_OPTIONS } from '@/components/feature/subway_jam/const';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { OptionItem } from '@/models/common';
 import { fetchData } from '@/lib/api/apiClient';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { Button } from '@workspace/ui/components/button';
+import { Jam } from '@/components/feature/subway_jam/type';
 
 interface SearchFilterProps {
-  // line: string;
-  // setLine: Dispatch<SetStateAction<string>>;
+  setJam: Dispatch<SetStateAction<Jam>>;
 }
 
-export default function SearchFilter() {
+export default function SearchFilter({ setJam }: SearchFilterProps) {
   const [stationOptions, setStationOptions] = useState([]);
-  const [timeOptions, setTimeOptions] = useState([]);
-  const { control } = useFormContext();
+
+  const { control, resetField } = useFormContext();
   const line = useWatch({
     control,
     name: 'line',
@@ -29,13 +28,12 @@ export default function SearchFilter() {
     control,
     name: 'station',
   });
-  const time = useWatch({
-    control,
-    name: 'time',
-  });
 
   useEffect(() => {
     if (!line) return;
+    setJam(null);
+    resetField('station');
+
     (async () => {
       const { data } = await fetchData(`/api/subway/option?line=${line}`, {
         method: 'GET',
@@ -46,17 +44,9 @@ export default function SearchFilter() {
         value: station,
       }));
 
-      const timeOpt = data.times.map((time) => ({
-        label: time,
-        value: time,
-      }));
-
       setStationOptions(stationOpt);
-      setTimeOptions(timeOpt);
     })();
   }, [line]);
-
-  console.log(timeOptions);
 
   return (
     <>
@@ -72,7 +62,8 @@ export default function SearchFilter() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="평일">평일</SelectItem>
-                <SelectItem value="주말">주말</SelectItem>
+                <SelectItem value="토요일">토요일</SelectItem>
+                <SelectItem value="일요일">일요일</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -118,29 +109,7 @@ export default function SearchFilter() {
             </Select>
           )}
         />
-        <Controller
-          control={control}
-          name="time"
-          render={({ field }) => (
-            <Select
-              onValueChange={field.onChange}
-              value={field.value}
-              disabled={!line}
-            >
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="시간대를 선택해주세요." />
-              </SelectTrigger>
-              <SelectContent>
-                {timeOptions.map((time, index) => (
-                  <SelectItem key={`time_${index}`} value={time.value}>
-                    {time.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-        <Button type="submit" disabled={!(line && station && time)}>
+        <Button type="submit" disabled={!(line && station)}>
           검색
         </Button>
       </div>

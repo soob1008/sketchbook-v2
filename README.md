@@ -34,14 +34,35 @@ https://sketchbook-v2.vercel.app/
 - **지뢰찾기**
 
 ### 🎮 Service
-- **AI 여행지 추천** - chatGPT (openai)
+## 🎮 Service
 
+---
+
+### 🚀 AI 여행지 추천
+
+- **기술 스택**: OpenAI ChatGPT API
+- **설명**: 사용자가 추천받고 싶은 여행 관련 키워드를 입력하면 AI가 추천해줍니다.
+
+---
+
+### 📰 Geek News RSS
+- **설명**: Geek News에서 제공하는 최신 개발자 뉴스를 가져와 보여줍니다.
+---
+
+### 🚇 지하철 혼잡도 시각화
+
+- **기술 스택**: D3.js, 서울시 공공데이터 (JSON)
+- **설명**: 호선/역을 선택하여 시간대별 혼잡도 차트로 보여줍니다.
+- **특징**:
+  - Open API 미제공으로 정적 JSON 파일 기반
+  - Next.js route handler 사용
 ---
 
 ## ⚡ 기술 스택
 - **Frontend**: Next.js, TypeScript
 - **모노레포 관리**: pnpm, Turborepo
 - **UI 라이브러리**: ShadCN UI (Tailwind 기반)
+- **데이터 시각화**: D3.js
 ---
 
 ## 📌 설치 및 실행
