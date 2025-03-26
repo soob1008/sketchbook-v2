@@ -50,7 +50,9 @@ export default function SearchFilter({ setJam }: SearchFilterProps) {
 
   return (
     <>
-      <h3 className="mb-3 font-bold font-sm">지하철 호선, 시간대 검색</h3>
+      <h3 className="mb-3 font-bold font-sm">
+        지하철 혼잡도 필터 – 이용일 · 호선 · 역 선택
+      </h3>
       <div className="flex gap-3">
         <Controller
           control={control}
