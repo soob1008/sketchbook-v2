@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { parse } from 'date-fns';
 import { Jam } from '@/components/feature/subway_jam/type';
+import { getSubwayLineColor } from '@/components/feature/subway_jam/util';
 
 interface SubwayJamChartProps {
   jam: Jam;
@@ -58,11 +59,11 @@ export default function SubwayJamChart({ jam }: SubwayJamChartProps) {
       .selectAll('rect')
       .data(data)
       .join('rect')
-      .attr('x', (d) => xScale(d.timeStr)!) // 막대의 x 좌표 (시간 위치)
-      .attr('y', (d) => yScale(d.jam)) // 막대의 꼭대기 위치
-      .attr('width', xScale.bandwidth()) // 막대 너비
-      .attr('height', (d) => height - marginBottom - yScale(d.jam)) // 높이는 y 위치 기준 계산
-      .attr('fill', 'orange'); // 색상
+      .attr('x', (d) => xScale(d.timeStr)!)
+      .attr('y', (d) => yScale(d.jam))
+      .attr('width', xScale.bandwidth())
+      .attr('height', (d) => height - marginBottom - yScale(d.jam))
+      .attr('fill', getSubwayLineColor(jam.호선));
   }, [jam]);
 
   return (
