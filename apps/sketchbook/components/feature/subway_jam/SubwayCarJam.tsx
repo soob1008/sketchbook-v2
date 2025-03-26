@@ -13,7 +13,8 @@ export default function SubwayCarJam({ jam }: SubwayCarJamProps) {
       {jam ? (
         <>
           <p className="font-semibold">
-            {getValues('line')}호선 {getValues('station')}역
+            {getValues('line')}호선 {getValues('station')}역{' '}
+            {getValues('dateType')}
           </p>
           <SubwayJamChart jam={jam} />
           <p className="mt-3 text-sm font-semibold text-blue-800">
