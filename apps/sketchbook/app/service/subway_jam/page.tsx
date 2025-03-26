@@ -6,8 +6,10 @@ import SubwayCarJam from '@/components/feature/subway_jam/SubwayCarJam';
 import SubwayPassengerFlow from '@/components/feature/subway_jam/SubwayPassengerFlow';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fetchData } from '@/lib/api/apiClient';
+import { useEffect, useState } from 'react';
 
 export default function SubwayJamPage() {
+  const [jam, setJam] = useState();
   const form = useForm({
     defaultValues: {
       line: '',
@@ -17,6 +19,16 @@ export default function SubwayJamPage() {
     },
   });
   const { getValues } = form;
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await fetchData(
+        `/api/subway/jam?line=2&station=강남&dateType=평일`,
+        {}
+      );
+      setJam(data.station);
+    })();
+  }, []);
 
   const handleSubmit = async () => {
     const { line, station, dateType } = getValues();
@@ -30,20 +42,22 @@ export default function SubwayJamPage() {
     console.log('submit', data);
   };
 
+  console.log('jam', jam);
+
   return (
     <div>
       <PageTitle
         title="지하철 혼잡도"
         description="지하철 호선과 시간대를 검색하여 선택된 열차 칸의 혼잡도와 전체 유동인구 흐름을 확인할 수 있습니다."
       />
-      <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <SearchFilter />
-        </form>
-      </FormProvider>
+      {/*<FormProvider {...form}>*/}
+      {/*  <form onSubmit={form.handleSubmit(handleSubmit)}>*/}
+      {/*    <SearchFilter />*/}
+      {/*  </form>*/}
+      {/*</FormProvider>*/}
       <div className="flex mt-10">
-        <SubwayCarJam />
-        <SubwayPassengerFlow />
+        <SubwayCarJam jam={jam} />
+        {/*<SubwayPassengerFlow />*/}
       </div>
     </div>
   );

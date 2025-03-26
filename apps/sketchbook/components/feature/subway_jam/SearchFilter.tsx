@@ -7,7 +7,7 @@ import {
 } from '@workspace/ui/components/select';
 import { SUBWAY_LINE_OPTIONS } from '@/components/feature/subway_jam/const';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { OptionItem } from '@/models/common';
+import { OptionItem } from '@/types/common';
 import { fetchData } from '@/lib/api/apiClient';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { Button } from '@workspace/ui/components/button';
