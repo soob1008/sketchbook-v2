@@ -29,6 +29,18 @@ export default function TetrisPage() {
   }, []);
 
   useEffect(() => {
+    if (!isPlaying) return;
+
+    const timer = setInterval(() => {
+      setTime((prev) => prev + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isPlaying]);
+
+  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
@@ -37,7 +49,6 @@ export default function TetrisPage() {
   });
 
   useEffect(() => {
-    if (!isPlaying) return;
     const timer = setInterval(() => {
       blockTimer();
     }, 1000);
@@ -45,13 +56,11 @@ export default function TetrisPage() {
     return () => {
       clearInterval(timer);
     };
-  }, [block, isPlaying]);
+  }, [block]);
 
   const blockTimer = () => {
     const { position, blockType, blockIndex } = block;
     const { x: boardX, y: boardY } = position;
-
-    setTime((prev) => prev + 1);
 
     // FIXME: 중복 로직 리팩토링
     if (
@@ -90,7 +99,7 @@ export default function TetrisPage() {
     statusIndex: number
   ): Position[] => {
     const status: number[][] = BLOCKS[`${blockKey}`]?.state[statusIndex] ?? [];
-    let positions = Array<Position>();
+    const positions = Array<Position>();
     status.forEach((row, rowIndex) => {
       row.forEach((cell, cellIndex) => {
         if (cell !== 0) {
@@ -159,7 +168,7 @@ export default function TetrisPage() {
       }
     } else if (e.code === 'Space') {
       for (let i = 0; i < board.length - boardY; i++) {
-        let movePosY = boardY + i;
+        const movePosY = boardY + i;
 
         if (
           !checkCells(
@@ -213,7 +222,7 @@ export default function TetrisPage() {
   ) => {
     const newBoard = board.map((row) => (row ? [...row] : [])); // 🚀 안전한 배열 복사
 
-    for (let position of positions) {
+    for (const position of positions) {
       const { x: blockX, y: blockY } = position;
 
       newBoard[boardY + blockY][boardX + blockX] = blockType;
@@ -281,7 +290,7 @@ export default function TetrisPage() {
     boardY: number,
     positions: Position[]
   ) => {
-    for (let position of positions) {
+    for (const position of positions) {
       const { x: blockX, y: blockY } = position;
 
       // 벽막기 - boardX + blockX = x의 절대좌표
