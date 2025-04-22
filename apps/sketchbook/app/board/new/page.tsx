@@ -19,15 +19,13 @@ export default function NewPostPage() {
       return;
     }
 
-    const slug = title.toLowerCase().replace(/\s+/g, '-');
-
     try {
       const res = await fetch('/api/posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title, content, slug }),
+        body: JSON.stringify({ title, content }),
       });
 
       if (!res.ok) throw new Error('글 작성 실패');
