@@ -13,7 +13,7 @@
     ],
     "skipLibCheck": true,
     "strict": false,
-    "noEmitOnError": false
+    "noEmitOnError": false,
   },
   "include": [
     "next-env.d.ts",
