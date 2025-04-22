@@ -9,15 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@workspace/ui/components/sidebar';
-import {
-  Calendar,
-  Pickaxe,
-  Inbox,
-  LucideIcon,
-  TicketsPlane,
-  Newspaper,
-  Train,
-} from 'lucide-react';
+import { Calendar, Pickaxe, Inbox, LucideIcon, TicketsPlane, Newspaper, Train, ClipboardList } from 'lucide-react';
 import Link from 'next/link';
 
 export function AppSidebar() {
@@ -29,14 +21,12 @@ export function AppSidebar() {
         </h1>
       </SidebarHeader>
       <SidebarContent>
-        {MENU_ITEMS.map((group) => (
+        {MENU_ITEMS.map(group => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel className="text-gray-800 font-semibold text-[14px]">
               {group.url ? (
                 <Link href={group.url} className="flex items-center">
-                  {group.icon && (
-                    <group.icon className="w-5 h-5 text-gray-600" />
-                  )}
+                  {group.icon && <group.icon className="w-5 h-5 text-gray-600" />}
                   <span className="ml-2">{group.title}</span>
                 </Link>
               ) : (
@@ -45,17 +35,12 @@ export function AppSidebar() {
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {group?.subMenu?.map((item) => (
+                {group?.subMenu?.map(item => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      className="text-[13px] font-semibold"
-                    >
+                    <SidebarMenuButton asChild className="text-[13px] font-semibold">
                       {item.url ? (
                         <Link href={item.url}>
-                          {item.icon && (
-                            <item.icon className="w-5 h-5 text-gray-600" />
-                          )}
+                          {item.icon && <item.icon className="w-5 h-5 text-gray-600" />}
                           <span className="ml-2">{item.title}</span>
                         </Link>
                       ) : (
@@ -95,11 +80,11 @@ const MENU_ITEMS: SideBarMenu[] = [
         url: '/playground',
         icon: Pickaxe,
       },
-      // {
-      //   title: 'Piano',
-      //   url: '/laboratory/piano',
-      //   icon: Piano,
-      // },
+      {
+        title: 'Board',
+        url: '/board',
+        icon: ClipboardList,
+      },
     ],
   },
   {
