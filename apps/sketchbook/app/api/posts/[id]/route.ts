@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma/prisma';
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+type Context = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+
+export async function GET(_: Request, context: Context) {
+  const params = await context.params;
+
   const post = await prisma.post.findUnique({
     where: { id: params.id },
   });
@@ -13,7 +21,8 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
   return NextResponse.json(post);
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: Context) {
+  const params = await context.params;
   const body = await req.json();
   const { title, content } = body;
 
@@ -25,7 +34,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   return NextResponse.json(updated);
 }
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_: NextRequest, context: Context) {
+  const params = await context.params;
+
   await prisma.post.delete({
     where: { id: params.id },
   });

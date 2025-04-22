@@ -7,6 +7,10 @@ import { fetchData } from '@/lib/api/apiClient';
 export default async function BoardPage() {
   const { data: posts } = await fetchData(`/api/posts`, {});
 
+  if (!posts) {
+    return <p className="text-gray-500">게시글을 불러오는 데 실패했습니다.</p>;
+  }
+
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
       <div className="flex justify-between items-center">

@@ -5,8 +5,10 @@ import { fetchData } from '@/lib/api/apiClient';
 import { Button } from '@workspace/ui/components/button';
 import PostDeleteButton from '@/components/feature/board/PostDeleteButton';
 
-export default async function PostDetailPage({ params }: { params: { id: string } }) {
-  const { data: post } = await fetchData(`/api/posts/${params.id}`, {});
+export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
+  const { data: post } = await fetchData(`/api/posts/${id}`, {});
   if (!post) notFound();
 
   return (
