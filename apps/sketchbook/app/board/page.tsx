@@ -5,7 +5,9 @@ import PageTitle from '@/components/ui/title';
 import { fetchData } from '@/lib/api/apiClient';
 
 export default async function BoardPage() {
-  const { data: posts } = await fetchData(`/api/posts`, {});
+  const { data: posts } = await fetchData(`/api/posts`, {
+    cache: 'no-store',
+  });
 
   if (!posts) {
     return <p className="text-gray-500">게시글을 불러오는 데 실패했습니다.</p>;
