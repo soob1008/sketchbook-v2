@@ -1,30 +1,27 @@
 'use server';
 
-import { toast } from 'sonner';
-
 interface FetchDataRequest {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: unknown;
   headers?: Record<string, string>;
   token?: string;
+  cache?: RequestCache;
 }
 
-export async function fetchData(
-  endpoint: string,
-  { method = 'GET', body, headers, token }: FetchDataRequest
-) {
+export async function fetchData(endpoint: string, { method = 'GET', body, headers, token, cache }: FetchDataRequest) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
   const url = `${apiUrl}${endpoint}`;
 
   const defaultHeaders = {
     'Content-Type': 'application/json',
     ...(token && { Authorization: `Bearer ${token}` }),
-    ...headers, // 사용자 지정 헤더
+    ...headers,
   };
 
-  const options = {
+  const options: RequestInit = {
     method,
     headers: defaultHeaders,
+    cache: cache ?? 'force-cache', // ← 기본값은 'force-cache'
     ...(body ? { body: JSON.stringify(body) } : {}),
   };
 
@@ -33,8 +30,7 @@ export async function fetchData(
     const data = await res.json().catch(() => null);
 
     if (!res.ok) {
-      toast.error(res.statusText);
-
+      console.error(`[fetchData] API 오류: ${res.statusText}`);
       return {
         status: res.status,
         error: data?.message || 'API 요청 실패',
@@ -42,7 +38,7 @@ export async function fetchData(
     }
 
     return { status: res.status, data };
-  } catch (error) {
+  } catch (error: any) {
     console.error(`[fetchData] API 요청 오류: ${error.message}`);
 
     return { status: 500, message: error.message };
