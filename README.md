@@ -28,6 +28,7 @@ https://sketchbook-v2.vercel.app/
 ### Playground
 - **피아노** - Web Audio API를 활용한 가상 피아노
 - **투두리스트** - `Redux` & `Zustand` 상태 관리 테스트
+- **게시판** - 글 생성, 수정 삭제 서버 연동
 
 ### Game
 - **테트리스** 
@@ -59,6 +60,7 @@ https://sketchbook-v2.vercel.app/
 - **모노레포 관리**: pnpm, Turborepo
 - **UI 라이브러리**: ShadCN UI (Tailwind 기반)
 - **데이터 시각화**: D3.js
+- **서버 연동**: prisma, Next.js API Routes, supabase
 ---
 
 ## 📌 설치 및 실행
