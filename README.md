@@ -60,7 +60,7 @@ https://sketchbook-v2.vercel.app/
 - **모노레포 관리**: pnpm, Turborepo
 - **UI 라이브러리**: ShadCN UI (Tailwind 기반)
 - **데이터 시각화**: D3.js
-- **서버 연동**: prisma, Next.js API Routes, supabase
+- **서버 연동**: prisma, Next.js API Routes, postgre, supabase
 ---
 
 ## 📌 설치 및 실행
