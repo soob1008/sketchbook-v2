@@ -3,13 +3,7 @@
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import {
-  BLOCKS,
-  BlockStatus,
-  BlockType,
-  createBlock,
-  Position,
-} from '@/lib/tetris';
+import { BLOCKS, BlockStatus, BlockType, createBlock, Position } from '@/lib/tetris';
 import { Button } from '@workspace/ui/components/button';
 import PageTitle from '@/components/ui/title';
 
@@ -32,7 +26,7 @@ export default function TetrisPage() {
     if (!isPlaying) return;
 
     const timer = setInterval(() => {
-      setTime((prev) => prev + 1);
+      setTime(prev => prev + 1);
     }, 1000);
 
     return () => {
@@ -63,23 +57,11 @@ export default function TetrisPage() {
     const { x: boardX, y: boardY } = position;
 
     // FIXME: 중복 로직 리팩토링
-    if (
-      checkCells(boardX, boardY + 1, getBlockPositions(blockType, blockIndex))
-    ) {
+    if (checkCells(boardX, boardY + 1, getBlockPositions(blockType, blockIndex))) {
       moveBlock(boardX, boardY + 1);
     } else {
-      fixToBoard(
-        boardX,
-        boardY,
-        blockType,
-        getBlockPositions(blockType, blockIndex)
-      );
-      removeBoardLine(
-        boardX,
-        boardY,
-        blockType,
-        getBlockPositions(blockType, blockIndex)
-      );
+      fixToBoard(boardX, boardY, blockType, getBlockPositions(blockType, blockIndex));
+      removeBoardLine(boardX, boardY, blockType, getBlockPositions(blockType, blockIndex));
       initBlock(boardX, getBlockPositions(blockType, blockIndex));
     }
   };
@@ -94,10 +76,7 @@ export default function TetrisPage() {
   };
 
   // 4x4 중에 null 이 아닌 cell 상대좌표를 리턴하는 함수
-  const getBlockPositions = (
-    blockKey: BlockType,
-    statusIndex: number
-  ): Position[] => {
+  const getBlockPositions = (blockKey: BlockType, statusIndex: number): Position[] => {
     const status: number[][] = BLOCKS[`${blockKey}`]?.state[statusIndex] ?? [];
     const positions = Array<Position>();
     status.forEach((row, rowIndex) => {
@@ -115,77 +94,52 @@ export default function TetrisPage() {
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
+    if (
+      e.key === 'ArrowUp' ||
+      e.key === 'ArrowDown' ||
+      e.key === 'ArrowLeft' ||
+      e.key === 'ArrowRight' ||
+      e.code === 'Space'
+    ) {
+      e.preventDefault();
+    }
+
     const { position, blockType, blockIndex } = block;
     const { x: boardX, y: boardY } = position;
 
     if (e.key === 'ArrowUp') {
-      const nextStatusIndex =
-        (block.blockIndex + 1) % BLOCKS[`${block.blockType}`].state.length;
+      const nextStatusIndex = (block.blockIndex + 1) % BLOCKS[`${block.blockType}`].state.length;
 
-      if (
-        checkCells(
-          boardX,
-          boardY,
-          getBlockPositions(blockType, nextStatusIndex)
-        )
-      ) {
-        setBlock((prevBlock) => ({
+      if (checkCells(boardX, boardY, getBlockPositions(blockType, nextStatusIndex))) {
+        setBlock(prevBlock => ({
           ...prevBlock,
           blockIndex: nextStatusIndex,
         }));
       }
     } else if (e.key === 'ArrowLeft') {
-      if (
-        checkCells(boardX - 1, boardY, getBlockPositions(blockType, blockIndex))
-      ) {
+      if (checkCells(boardX - 1, boardY, getBlockPositions(blockType, blockIndex))) {
         moveBlock(boardX - 1, boardY);
       }
     } else if (e.key === 'ArrowRight') {
-      if (
-        checkCells(boardX + 1, boardY, getBlockPositions(blockType, blockIndex))
-      ) {
+      if (checkCells(boardX + 1, boardY, getBlockPositions(blockType, blockIndex))) {
         moveBlock(boardX + 1, boardY);
       }
     } else if (e.key === 'ArrowDown') {
-      if (
-        checkCells(boardX, boardY + 1, getBlockPositions(blockType, blockIndex))
-      ) {
+      if (checkCells(boardX, boardY + 1, getBlockPositions(blockType, blockIndex))) {
         moveBlock(boardX, boardY + 1);
       } else {
-        fixToBoard(
-          boardX,
-          boardY,
-          blockType,
-          getBlockPositions(blockType, blockIndex)
-        );
-        removeBoardLine(
-          boardX,
-          boardY,
-          blockType,
-          getBlockPositions(blockType, blockIndex)
-        );
+        fixToBoard(boardX, boardY, blockType, getBlockPositions(blockType, blockIndex));
+        removeBoardLine(boardX, boardY, blockType, getBlockPositions(blockType, blockIndex));
         initBlock(boardX, getBlockPositions(blockType, blockIndex));
       }
     } else if (e.code === 'Space') {
       for (let i = 0; i < board.length - boardY; i++) {
         const movePosY = boardY + i;
 
-        if (
-          !checkCells(
-            boardX,
-            movePosY,
-            getBlockPositions(blockType, blockIndex)
-          ) &&
-          movePosY > 0
-        ) {
+        if (!checkCells(boardX, movePosY, getBlockPositions(blockType, blockIndex)) && movePosY > 0) {
           // movePosY가 이동할 수 없으면 이전 위치까지만 이동 시킨다.
           moveBlock(boardX, movePosY - 1);
-          removeBoardLine(
-            boardX,
-            movePosY - 1,
-            blockType,
-            getBlockPositions(blockType, blockIndex)
-          );
+          removeBoardLine(boardX, movePosY - 1, blockType, getBlockPositions(blockType, blockIndex));
           initBlock(boardX, getBlockPositions(blockType, blockIndex));
           return false;
         }
@@ -214,13 +168,8 @@ export default function TetrisPage() {
   };
 
   // 라인 삭제하고 그 위에 있는 보드의 값을 아래에 반영해준다.
-  const removeBoardLine = (
-    boardX: number,
-    boardY: number,
-    blockType: BlockType,
-    positions: Position[]
-  ) => {
-    const newBoard = board.map((row) => (row ? [...row] : [])); // 🚀 안전한 배열 복사
+  const removeBoardLine = (boardX: number, boardY: number, blockType: BlockType, positions: Position[]) => {
+    const newBoard = board.map(row => (row ? [...row] : [])); // 🚀 안전한 배열 복사
 
     for (const position of positions) {
       const { x: blockX, y: blockY } = position;
@@ -229,7 +178,7 @@ export default function TetrisPage() {
     }
 
     for (let y = newBoard.length - 1; y >= 0; y--) {
-      const isRemove = newBoard[y].every((x) => x !== null);
+      const isRemove = newBoard[y].every(x => x !== null);
 
       if (isRemove) {
         for (let i = y; i >= 0; i--) {
@@ -261,13 +210,8 @@ export default function TetrisPage() {
     setBoard(newBoard);
   };
 
-  const fixToBoard = (
-    x: number,
-    y: number,
-    type: BlockType,
-    positions: Position[]
-  ) => {
-    const newBoard = board.map((row) => [...row]);
+  const fixToBoard = (x: number, y: number, type: BlockType, positions: Position[]) => {
+    const newBoard = board.map(row => [...row]);
 
     for (let position of positions) {
       const { x: blockX, y: blockY } = position;
@@ -278,18 +222,14 @@ export default function TetrisPage() {
   };
 
   const moveBlock = (x: number, y: number) => {
-    setBlock((prevBlock) => ({
+    setBlock(prevBlock => ({
       ...prevBlock,
       position: { x, y },
     }));
   };
 
   // 블럭 cell 체크 - 블럭 이동 가능 여부 검사
-  const checkCells = (
-    boardX: number,
-    boardY: number,
-    positions: Position[]
-  ) => {
+  const checkCells = (boardX: number, boardY: number, positions: Position[]) => {
     for (const position of positions) {
       const { x: blockX, y: blockY } = position;
 
@@ -316,36 +256,24 @@ export default function TetrisPage() {
     <>
       <PageTitle title="테트리스" />
       <div className="relative flex">
-        <div className="w-[350px] border border-gray-400 box-content">
+        <div className="w-[300px] border border-gray-400 box-content">
           {board.map((row, rowIndex) => (
-            <div
-              key={`board-row-${rowIndex}`}
-              className="flex items-center justify-center"
-            >
-              {row.map((boardCell, colIndex) => {
-                const positions = getBlockPositions(
-                  block.blockType,
-                  block.blockIndex
-                ).map((it) => ({
+            <div key={`board-row-${rowIndex}`} className="flex items-center justify-center">
+              {row.map((_, colIndex) => {
+                const positions = getBlockPositions(block.blockType, block.blockIndex).map(it => ({
                   x: it.x + block.position.x,
                   y: it.y + block.position.y,
                 }));
 
-                const isBlock = positions.find(
-                  (it) => it.y === rowIndex && it.x === colIndex
-                );
-                const boardValue = isBlock
-                  ? block.blockType
-                  : board[rowIndex][colIndex];
+                const isBlock = positions.find(it => it.y === rowIndex && it.x === colIndex);
+                const boardValue = isBlock ? block.blockType : board[rowIndex][colIndex];
 
                 return (
                   <div
                     key={`board-cell-${rowIndex}-${colIndex}`}
-                    className={`flex w-[35px] h-[35px]`}
+                    className={`flex w-[30px] h-[30px]`}
                     style={{
-                      border: boardValue
-                        ? `4px outset ${BLOCKS[boardValue]?.color}`
-                        : '1px solid #f1f1f1',
+                      border: boardValue ? `4px outset ${BLOCKS[boardValue]?.color}` : '1px solid #f1f1f1',
                       backgroundColor: BLOCKS[boardValue]?.color || '#fff',
                     }}
                   />
