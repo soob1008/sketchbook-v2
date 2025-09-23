@@ -6,6 +6,7 @@ import { Frown, Laugh, PartyPopper, Bomb, Flag } from 'lucide-react';
 type Cell = {
   row: number;
   col: number;
+  open: boolean;
   isMine: boolean;
   adjacentMines: number;
 };
@@ -21,7 +22,7 @@ const DIRECTION = [
   [1, 1],
 ];
 
-const generateBoard = (rows: number, cols: number, mines: number) => {
+const createBoard = (rows: number, cols: number, mines: number) => {
   // 1. 기본 보드 만들기
   const board: Cell[][] = Array.from({ length: rows }, (_, rowIndex) =>
     Array.from({ length: cols }, (_, colIndex) => ({
@@ -68,22 +69,22 @@ const generateBoard = (rows: number, cols: number, mines: number) => {
 };
 
 export default function MinesweeperContainer() {
-  const [board, setBoared] = useState(generateBoard(9, 9, 10));
+  const [board, setBoard] = useState(createBoard(9, 9, 10));
 
-  // init
-  const handleStart = () => {
-    setBoared(generateBoard(9, 9, 10));
+  // 새 게임 시작
+  const handleRestart = () => {
+    setBoard(createBoard(9, 9, 10));
   };
 
-  const handleOpenMinesweeper = () => {
-    console.log('open');
+  // 셀 열기
+  const handleOpenCell = (cell: Cell) => {
+    console.log('open', cell);
   };
-
   return (
-    <div className="p-4 bg-red-100 w-[300px] rounded">
+    <div className="p-4 bg-red-100 w-[360px] rounded">
       <h3 className="font-bold">지뢰찾기 초급</h3>
       <div className="flex items-center justify-center mt-6">
-        <button type="button" onClick={handleStart} className="p-1 bg-white rounded">
+        <button type="button" onClick={handleRestart} className="p-1 bg-white rounded">
           <Laugh />
         </button>
       </div>
@@ -96,15 +97,24 @@ export default function MinesweeperContainer() {
         {board.map((row, rowIndex) => {
           return (
             <div key={`row-${rowIndex}`} className="flex items-center justify-around">
-              {row.map(col => {
+              {row.map(cell => {
+                const { row, col, open, isMine, adjacentMines } = cell;
+
                 return (
-                  <button
-                    key={`col-${col.row}-${col.col}`}
-                    onClick={handleOpenMinesweeper}
-                    className="w-6 h-6 bg-gray-300 rounded-sm text-sm"
+                  <div
+                    key={`cell-${row}-${col}`}
+                    className="flex items-center justify-center w-8 h-8 bg-gray-300 rounded-sm text-sm"
                   >
-                    {col.adjacentMines}
-                  </button>
+                    {open ? (
+                      isMine ? (
+                        <Bomb />
+                      ) : (
+                        <span>{adjacentMines}</span>
+                      )
+                    ) : (
+                      <button onClick={() => handleOpenCell(cell)}>{cell.adjacentMines}</button>
+                    )}
+                  </div>
                 );
               })}
             </div>
