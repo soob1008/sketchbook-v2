@@ -4,14 +4,7 @@ import { useState, MouseEvent } from 'react';
 import { Frown, Laugh, PartyPopper, Bomb, Flag } from 'lucide-react';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import {
-  AROUND_POSITIONS,
-  COL_LENGTH,
-  GameStatus,
-  MINE_COUNT,
-  MineType,
-  ROW_LENGTH,
-} from '@/lib/minesweeper';
+import { AROUND_POSITIONS, COL_LENGTH, GameStatus, MINE_COUNT, MineType, ROW_LENGTH } from '@/lib/minesweeper';
 import useInterval from '@/hooks/useInterval';
 import PageTitle from '@/components/ui/title';
 
@@ -33,9 +26,7 @@ const getMinePosition = () => {
     const x = Math.floor(Math.random() * COL_LENGTH);
     const y = Math.floor(Math.random() * ROW_LENGTH);
 
-    const included = mineArr.some(
-      (minePos) => JSON.stringify(minePos) === JSON.stringify([x, y])
-    );
+    const included = mineArr.some(minePos => JSON.stringify(minePos) === JSON.stringify([x, y]));
 
     if (!included) {
       mineArr.push([x, y]);
@@ -47,17 +38,15 @@ const getMinePosition = () => {
 
 // 지뢰 좌표를 보드 값에 넣어준다.
 const createMineBoard = (): MineBlock[][] => {
-  const initBoardArray: MineBlock[][] = Array.from(
-    { length: ROW_LENGTH },
-    (_: MineBlock[], rowIndex) =>
-      Array(COL_LENGTH)
-        .fill({} as MineBlock)
-        .map((_: MineBlock, colIndex) => ({
-          type: 'inVisible',
-          isOpen: false,
-          isMine: false,
-          mineCount: 0,
-        }))
+  const initBoardArray: MineBlock[][] = Array.from({ length: ROW_LENGTH }, (_: MineBlock[], rowIndex) =>
+    Array(COL_LENGTH)
+      .fill({} as MineBlock)
+      .map((_: MineBlock, colIndex) => ({
+        type: 'inVisible',
+        isOpen: false,
+        isMine: false,
+        mineCount: 0,
+      }))
   );
 
   const minePosition: number[][] = getMinePosition();
@@ -65,8 +54,7 @@ const createMineBoard = (): MineBlock[][] => {
   // 보드에 isMine true 넣어주기
   initBoardArray.forEach((row, rowIndex) => {
     row.forEach((cell, cellIndex) => {
-      if (!initBoardArray[rowIndex] || !initBoardArray[rowIndex][cellIndex])
-        return;
+      if (!initBoardArray[rowIndex] || !initBoardArray[rowIndex][cellIndex]) return;
 
       for (let pos of minePosition) {
         const { [0]: x, [1]: y } = pos;
@@ -90,20 +78,15 @@ const MineSweeperBoard = () => {
   const [gameStatus, setGameStatus] = useState<GameStatus>('CONTINUE');
   const [time, setTime] = useState(0);
 
-  const setMineBlockToBoard = (
-    newBoard: MineBlock[][],
-    x: number,
-    y: number,
-    block: MineBlock
-  ) => {
+  const setMineBlockToBoard = (newBoard: MineBlock[][], x: number, y: number, block: MineBlock) => {
     if (!newBoard[y] || !newBoard[y][x]) return;
     newBoard[y][x] = block;
   };
 
   const checkGameOver = (board: MineBlock[][]) => {
     let closeCount = 0;
-    for (let row of board) {
-      for (let cell of row) {
+    for (const row of board) {
+      for (const cell of row) {
         if (cell.isMine && cell.isOpen) {
           return 'FAIL';
         }
@@ -133,7 +116,7 @@ const MineSweeperBoard = () => {
     if (gameStatus === 'FAIL') return;
     if (!board[y] || !board[y][x]) return;
     if (board[y][x].isOpen) return;
-    const newBoard = board.map((row) => [...row]);
+    const newBoard = board.map(row => [...row]);
 
     // 왼쪽 마우스 눌렀을 때
     if (!newBoard[y] || !newBoard[y][x]) return;
@@ -156,14 +139,14 @@ const MineSweeperBoard = () => {
           type: 'flag',
         });
 
-        setRemainFlag((prev) => prev - 1);
+        setRemainFlag(prev => prev - 1);
       } else if (newBoard[y][x].type === 'flag') {
         setMineBlockToBoard(newBoard, x, y, {
           ...newBoard[y][x],
           type: 'inVisible',
         });
 
-        setRemainFlag((prev) => prev + 1);
+        setRemainFlag(prev => prev + 1);
       }
     }
 
@@ -200,14 +183,7 @@ const MineSweeperBoard = () => {
 
   const openBlock = (board: MineBlock[][], x: number, y: number) => {
     // x, y 값이 0 보다 작거나 maxLength 보다 크면 종료.
-    if (
-      x < 0 ||
-      y < 0 ||
-      x >= COL_LENGTH ||
-      y >= ROW_LENGTH ||
-      board[y]?.[x]?.isOpen ||
-      board[y]?.[x]?.type === 'flag'
-    )
+    if (x < 0 || y < 0 || x >= COL_LENGTH || y >= ROW_LENGTH || board[y]?.[x]?.isOpen || board[y]?.[x]?.type === 'flag')
       return false;
 
     // 1. 주변의 지뢰 개수를 구한다.// 주변에 지뢰가 있는 경우,
@@ -222,7 +198,7 @@ const MineSweeperBoard = () => {
 
     // 주변에 지뢰가 없으면 주변 블록을 연다.
     if (mineCount === 0) {
-      for (let pos of AROUND_POSITIONS) {
+      for (const pos of AROUND_POSITIONS) {
         const [posX, posY] = pos;
 
         if (x + posX >= 0 && y + posY >= 0) {
@@ -250,9 +226,7 @@ const MineSweeperBoard = () => {
             {gameStatus === 'CONTINUE' && <Laugh />}
             {gameStatus === 'SUCCESS' && <PartyPopper />}
           </button>
-          <span className="time">
-            {dayjs.duration(time, 'seconds').format('HH:mm:ss')}
-          </span>
+          <span className="time">{dayjs.duration(time, 'seconds').format('HH:mm:ss')}</span>
         </div>
         {board.map((row, rowIndex) => (
           <div key={`mine-row-${rowIndex}`} className="flex">
@@ -268,8 +242,8 @@ const MineSweeperBoard = () => {
                   style={{
                     backgroundColor: getBlockColor(cell.type),
                   }}
-                  onClick={(e) => onClickBlock(e, cellIndex, rowIndex)}
-                  onContextMenu={(e) => onClickBlock(e, cellIndex, rowIndex)}
+                  onClick={e => onClickBlock(e, cellIndex, rowIndex)}
+                  onContextMenu={e => onClickBlock(e, cellIndex, rowIndex)}
                 >
                   {mineCount > 0 && mineCount}
                   {(type === 'mine' || type === 'explodedMine') && <Bomb />}

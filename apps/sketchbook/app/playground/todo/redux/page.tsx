@@ -1,4 +1,4 @@
-import Todo from '@/components/feature/todo/redux/Todo';
+import Todo from '@/features/todo/redux/Todo';
 
 export default function ReduxTodoPage() {
   return <Todo />;

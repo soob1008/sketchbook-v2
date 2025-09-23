@@ -1,13 +1,13 @@
 'use client';
 
 import PageTitle from '@/components/ui/title';
-import SearchFilter from '@/components/feature/subway_jam/SearchFilter';
-import SubwayCarJam from '@/components/feature/subway_jam/SubwayCarJam';
-import SubwayPassengerFlow from '@/components/feature/subway_jam/SubwayPassengerFlow';
+import SearchFilter from '@/features/subway_jam/SearchFilter';
+import SubwayCarJam from '@/features/subway_jam/SubwayCarJam';
+import SubwayPassengerFlow from '@/features/subway_jam/SubwayPassengerFlow';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fetchData } from '@/lib/api/apiClient';
 import { useState } from 'react';
-import { Jam } from '@/components/feature/subway_jam/type';
+import { Jam } from '@/features/subway_jam/type';
 
 export default function SubwayJamPage() {
   const [jam, setJam] = useState<Jam>();

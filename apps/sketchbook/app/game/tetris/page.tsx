@@ -169,7 +169,7 @@ export default function TetrisPage() {
 
   // 라인 삭제하고 그 위에 있는 보드의 값을 아래에 반영해준다.
   const removeBoardLine = (boardX: number, boardY: number, blockType: BlockType, positions: Position[]) => {
-    const newBoard = board.map(row => (row ? [...row] : [])); // 🚀 안전한 배열 복사
+    const newBoard = board.map(row => (row ? [...row] : [])); // 안전한 배열 복사
 
     for (const position of positions) {
       const { x: blockX, y: blockY } = position;
@@ -213,7 +213,7 @@ export default function TetrisPage() {
   const fixToBoard = (x: number, y: number, type: BlockType, positions: Position[]) => {
     const newBoard = board.map(row => [...row]);
 
-    for (let position of positions) {
+    for (const position of positions) {
       const { x: blockX, y: blockY } = position;
       newBoard[y + blockY][x + blockX] = type;
     }

@@ -1,4 +1,4 @@
-import Todo from '@/components/feature/todo/zustand/Todo';
+import Todo from '@/features/todo/zustand/Todo';
 
 export default function ZustandPage() {
   return <Todo />;

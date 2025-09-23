@@ -4,13 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Slider } from '@workspace/ui/components/slider';
 import { Button } from '@workspace/ui/components/button';
 import { Duration, getDuration, PIANO_KEYS, SONGS } from '@/lib/piano';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@workspace/ui/components/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui/components/select';
 import { Volume, VolumeOff } from 'lucide-react';
 import PageTitle from '@/components/ui/title';
 
@@ -21,9 +15,7 @@ const Piano = () => {
   const [selectedSong, setSelectedSong] = useState('');
 
   const audioContext = useRef<AudioContext | null>(
-    typeof window !== 'undefined'
-      ? new (window.AudioContext || (window as any).webkitAudioContext)()
-      : null
+    typeof window !== 'undefined' ? new (window.AudioContext || (window as any).webkitAudioContext)() : null
   ).current;
   const gainNode = useRef(audioContext?.createGain()).current;
 
@@ -43,22 +35,13 @@ const Piano = () => {
     gainNode.gain.linearRampToValueAtTime(volume[0], now + attackTime);
 
     // Decay
-    gainNode.gain.linearRampToValueAtTime(
-      volume[0] * sustainLevel,
-      now + attackTime + decayTime
-    );
+    gainNode.gain.linearRampToValueAtTime(volume[0] * sustainLevel, now + attackTime + decayTime);
 
     // Sustain (유지)
-    gainNode.gain.setValueAtTime(
-      volume[0] * sustainLevel,
-      now + attackTime + decayTime
-    );
+    gainNode.gain.setValueAtTime(volume[0] * sustainLevel, now + attackTime + decayTime);
 
     // Release
-    gainNode.gain.linearRampToValueAtTime(
-      0,
-      now + attackTime + decayTime + releaseTime
-    );
+    gainNode.gain.linearRampToValueAtTime(0, now + attackTime + decayTime + releaseTime);
 
     osc.type = 'sine';
     osc.frequency.setValueAtTime(freq, audioContext.currentTime);
@@ -78,19 +61,17 @@ const Piano = () => {
     const time = duration ? duration : 0.3;
 
     await audioContext.resume();
-    await new Promise((resolve) => setTimeout(resolve, time * 1000));
+    await new Promise(resolve => setTimeout(resolve, time * 1000));
   };
 
   const onAutoPlaySong = async () => {
-    const currentSong = SONGS.filter((song) => song.id === selectedSong)[0];
+    const currentSong = SONGS.filter(song => song.id === selectedSong)[0];
 
-    const songs = currentSong.score.map((notes) => notes.notes);
+    const songs = currentSong.score.map(notes => notes.notes);
 
-    for (let song of songs) {
-      for (let note of song) {
-        const { freq } = PIANO_KEYS.find(
-          (key) => key.pitch === note.pitch && key.octave === note.octave
-        ) || { freq: 0 };
+    for (const song of songs) {
+      for (const note of song) {
+        const { freq } = PIANO_KEYS.find(key => key.pitch === note.pitch && key.octave === note.octave) || { freq: 0 };
 
         const duration = getDuration(note.duration as Duration);
 
@@ -103,7 +84,7 @@ const Piano = () => {
   };
 
   const getSongOptions = () => {
-    return SONGS.map((song) => {
+    return SONGS.map(song => {
       return { label: song.title, value: song.id };
     });
   };
@@ -133,14 +114,7 @@ const Piano = () => {
           <button style={{ marginRight: 5 }} onClick={onClickVolume}>
             {volume[0] > 0 ? <Volume /> : <VolumeOff />}
           </button>
-          <Slider
-            min={0}
-            max={1}
-            step={0.1}
-            onValueChange={onChangeVolume}
-            value={volume}
-            className="w-[200px]"
-          />
+          <Slider min={0} max={1} step={0.1} onValueChange={onChangeVolume} value={volume} className="w-[200px]" />
         </div>
         <div className="flex items-center gap-3">
           <Select onValueChange={onSelectSong}>
@@ -161,14 +135,8 @@ const Piano = () => {
       <div className="w-[1024px]">
         <div className="overflow-hidden flex mt-20 p-3 bg-black rounded-sm">
           {PIANO_KEYS.map((note, index) => {
-            const blackClassName =
-              note.freq === currentFreq && note.pitch.includes('#')
-                ? 'bg-blue-300'
-                : '';
-            const whiteClassName =
-              note.freq === currentFreq && !note.pitch.includes('#')
-                ? 'bg-red-300'
-                : '';
+            const blackClassName = note.freq === currentFreq && note.pitch.includes('#') ? 'bg-blue-300' : '';
+            const whiteClassName = note.freq === currentFreq && !note.pitch.includes('#') ? 'bg-red-300' : '';
 
             return (
               <button
