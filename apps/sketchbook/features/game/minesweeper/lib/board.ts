@@ -1,7 +1,9 @@
-import { Board } from '../types';
-import { DIRECTION } from './constants';
+import { Board, Level } from '../types';
+import { DIRECTION, LEVEL_CONFIG } from './constants';
 
-export const createBoard = (rows: number, cols: number, mines: number): Board => {
+export const createBoard = (level: Level): Board => {
+  const { rows, cols, mines } = LEVEL_CONFIG[level];
+
   const board: Board = Array.from({ length: rows }, (_, rowIndex) =>
     Array.from({ length: cols }, (_, colIndex) => ({
       row: rowIndex,
@@ -69,7 +71,8 @@ export const floodOpen = (board: Board, r: number, c: number) => {
 export const checkWinOnBoard = (board: Board) => {
   for (const row of board) {
     for (const cell of row) {
-      if (!cell.isMine && !cell.open && !cell.flagged) {
+      // Win when all non-mine cells are open. Flags do not count as open.
+      if (!cell.isMine && !cell.open) {
         return false;
       }
     }

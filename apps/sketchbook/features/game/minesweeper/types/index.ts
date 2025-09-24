@@ -9,3 +9,4 @@ export type Cell = {
 
 export type Board = Cell[][];
 
+export type Level = 'beginner' | 'intermediate' | 'expert';
