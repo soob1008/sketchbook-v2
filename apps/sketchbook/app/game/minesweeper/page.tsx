@@ -10,7 +10,7 @@ const MINESWEEPER_LIST = [
   },
   {
     title: '두번째 지뢰찾기',
-    description: 'Zustand 를 이용한 투두리스트입니다.',
+    description: '난이도 선택 가능',
     url: '/game/minesweeper/2',
   },
 ];

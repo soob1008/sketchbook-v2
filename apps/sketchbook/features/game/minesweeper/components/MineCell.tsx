@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Bomb, Flag } from 'lucide-react';
 import { Cell } from '../types';
@@ -24,7 +24,7 @@ export default function MineCell({ cell, onOpen, onToggleFlag }: Props) {
         isMine ? (
           <Bomb />
         ) : (
-          <span>{adjacentMines}</span>
+          <span>{adjacentMines > 0 ? adjacentMines : ''}</span>
         )
       ) : (
         <button
@@ -33,7 +33,7 @@ export default function MineCell({ cell, onOpen, onToggleFlag }: Props) {
             e.preventDefault();
             onToggleFlag(cell);
           }}
-          className="flex items-center justify-center w-9 h-9"
+          className="flex items-center justify-center w-8 h-8"
         >
           {flagged ? <Flag /> : ''}
         </button>
