@@ -174,15 +174,15 @@ export default function TetrisPage() {
     for (const position of positions) {
       const { x: blockX, y: blockY } = position;
 
-      newBoard[boardY + blockY][boardX + blockX] = blockType;
+      newBoard[boardY + blockY]![boardX + blockX] = blockType;
     }
 
     for (let y = newBoard.length - 1; y >= 0; y--) {
-      const isRemove = newBoard[y].every(x => x !== null);
+      const isRemove = newBoard[y]!.every(x => x !== null);
 
       if (isRemove) {
         for (let i = y; i >= 0; i--) {
-          newBoard[i] = newBoard[i - 1];
+          newBoard[i] = newBoard[i - 1] ?? new Array(10).fill(null);
         }
         newBoard[0] = new Array(10).fill(null);
         y++;
@@ -215,7 +215,7 @@ export default function TetrisPage() {
 
     for (const position of positions) {
       const { x: blockX, y: blockY } = position;
-      newBoard[y + blockY][x + blockX] = type;
+      newBoard[y + blockY]![x + blockX] = type;
     }
 
     setBoard(newBoard);
@@ -243,7 +243,7 @@ export default function TetrisPage() {
       }
 
       // 보드에 블럭이 있을 경우 막기
-      if (board[boardY + blockY][boardX + blockX]) {
+      if (board[boardY + blockY]![boardX + blockX]) {
         return false;
       }
     }
@@ -266,7 +266,7 @@ export default function TetrisPage() {
                 }));
 
                 const isBlock = positions.find(it => it.y === rowIndex && it.x === colIndex);
-                const boardValue = isBlock ? block.blockType : board[rowIndex][colIndex];
+                const boardValue = isBlock ? block.blockType : board[rowIndex]![colIndex];
 
                 return (
                   <div
@@ -274,7 +274,7 @@ export default function TetrisPage() {
                     className={`flex w-[30px] h-[30px]`}
                     style={{
                       border: boardValue ? `4px outset ${BLOCKS[boardValue]?.color}` : '1px solid #f1f1f1',
-                      backgroundColor: BLOCKS[boardValue]?.color || '#fff',
+                      backgroundColor: boardValue ? BLOCKS[boardValue]?.color : '#fff',
                     }}
                   />
                 );

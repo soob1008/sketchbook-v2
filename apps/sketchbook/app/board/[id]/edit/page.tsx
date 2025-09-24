@@ -9,7 +9,7 @@ import PageTitle from '@/components/ui/title';
 import { useToast } from '@workspace/ui/hooks/use-toast';
 import { fetchData } from '@/lib/api/apiClient';
 
-type Post = {
+export type Post = {
   id: string;
   title: string;
   content: string;

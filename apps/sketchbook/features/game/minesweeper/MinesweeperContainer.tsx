@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Frown, Laugh, PartyPopper, Bomb, Flag } from 'lucide-react';
+import { Laugh, Bomb } from 'lucide-react';
 
 type Cell = {
   row: number;
@@ -12,7 +12,7 @@ type Cell = {
   adjacentMines: number;
 };
 
-const DIRECTION = [
+const DIRECTION: [number, number][] = [
   [-1, -1],
   [-1, 0],
   [-1, 1],
@@ -23,8 +23,7 @@ const DIRECTION = [
   [1, 1],
 ];
 
-const createBoard = (rows: number, cols: number, mines: number) => {
-  // 1. 기본 보드 만들기
+const createBoard = (rows: number, cols: number, mines: number): Cell[][] => {
   const board: Cell[][] = Array.from({ length: rows }, (_, rowIndex) =>
     Array.from({ length: cols }, (_, colIndex) => ({
       row: rowIndex,
@@ -36,34 +35,32 @@ const createBoard = (rows: number, cols: number, mines: number) => {
     }))
   );
 
-  // 2. 랜덤 위치에 지뢰 배치
   let placed = 0;
   while (placed < mines) {
     const r = Math.floor(Math.random() * rows);
     const c = Math.floor(Math.random() * cols);
 
-    if (board[r] && board[r][c] && !board[r][c]?.isMine) {
-      board[r][c].isMine = true;
+    if (!board[r]![c]!.isMine) {
+      board[r]![c]!.isMine = true;
       placed++;
     }
   }
 
-  // 3. 주변 지뢰수 업데이트
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      if (board[r][c].isMine) continue;
+      if (board[r]![c]!.isMine) continue;
       let count = 0;
 
       for (const [dr, dc] of DIRECTION) {
         const newR = r + dr;
         const newC = c + dc;
 
-        if (newR >= 0 && newC >= 0 && newR < rows && newC < cols && board[newR][newC]?.isMine) {
+        if (newR >= 0 && newC >= 0 && newR < rows && newC < cols && board[newR]![newC]!.isMine) {
           count++;
         }
       }
 
-      board[r][c].adjacentMines = count;
+      board[r]![c]!.adjacentMines = count;
     }
   }
 
@@ -71,37 +68,33 @@ const createBoard = (rows: number, cols: number, mines: number) => {
 };
 
 export default function MinesweeperContainer() {
-  const [board, setBoard] = useState(createBoard(9, 9, 10));
+  const [board, setBoard] = useState<Cell[][]>(() => createBoard(9, 9, 10));
   const [isGameOver, setIsGameOver] = useState(false);
   const [flag, setFlag] = useState(10);
-  // 새 게임 시작
+
   const handleRestart = () => {
     setBoard(createBoard(9, 9, 10));
+    setIsGameOver(false);
+    setFlag(10);
   };
 
-  // 깃 발 놓기
-
-  // 셀 열기
-  const handleOpenCell = (e, cell: Cell) => {
+  const handleOpenCell = (e: React.MouseEvent<HTMLButtonElement>, cell: Cell) => {
     if (isGameOver || cell.open) return;
 
-    // if (e.button === 2) {
-    // }
-
-    const newBoard = board.map(row => row.map(c => ({ ...c })));
+    const newBoard: Cell[][] = board.map(row => row.map(c => ({ ...c })));
 
     const openCell = (r: number, c: number) => {
       if (!newBoard[r] || !newBoard[r][c]) return;
       const target = newBoard[r][c];
-      if (target.open || target?.isMine) return;
+      if (target.open || target.isMine) return;
 
       target.open = true;
 
-      if (target?.adjacentMines === 0) {
+      if (target.adjacentMines === 0) {
         for (const [dr, dc] of DIRECTION) {
           const nr = r + dr;
           const nc = c + dc;
-          if (nr >= 0 && nc >= 0 && nr < newBoard.length && nc < newBoard[0].length) {
+          if (nr >= 0 && nc >= 0 && nr < newBoard.length && nc < newBoard[0]!.length) {
             openCell(nr, nc);
           }
         }
@@ -110,7 +103,7 @@ export default function MinesweeperContainer() {
 
     if (cell.isMine) {
       setIsGameOver(true);
-      newBoard[cell.row][cell.col].open = true;
+      newBoard[cell.row]![cell.col]!.open = true;
     } else {
       openCell(cell.row, cell.col);
     }
@@ -127,42 +120,37 @@ export default function MinesweeperContainer() {
         </button>
       </div>
       <div className="flex">
-        <span>Flag: 10</span>
-        <span></span>
+        <span>Flag: {flag}</span>
       </div>
-      {/* 지뢰 찾기 보드 */}
       <div className="flex flex-col mt-4">
-        {board.map((row, rowIndex) => {
-          return (
-            <div key={`row-${rowIndex}`} className="flex items-center">
-              {row.map(cell => {
-                const { row, col, open, isMine, adjacentMines } = cell;
+        {board.map((row, rowIndex) => (
+          <div key={`row-${rowIndex}`} className="flex items-center">
+            {row.map(cell => {
+              const { row, col, open, isMine, adjacentMines } = cell;
 
-                const openClass = open
-                  ? 'bg-gray-200 shadow-[inset_0.5px_0.5px_0_#666,inset_-0.5px_-0.5px_0_#fff]'
-                  : 'bg-gray-300 shadow-[0.5px_0.5px_0_#666,-0.5px_-0.5px_0_#fff]';
+              const openClass = open
+                ? 'bg-gray-200 shadow-[inset_0.5px_0.5px_0_#666,inset_-0.5px_-0.5px_0_#fff]'
+                : 'bg-gray-300 shadow-[0.5px_0.5px_0_#666,-0.5px_-0.5px_0_#fff]';
 
-                return (
-                  <div
-                    key={`cell-${row}-${col}`}
-                    className={`flex items-center justify-center w-9 h-9 text-sm font-bold 
-    border border-gray-400  ${openClass}`}
-                  >
-                    {open ? (
-                      isMine ? (
-                        <Bomb />
-                      ) : (
-                        <span>{adjacentMines}</span>
-                      )
+              return (
+                <div
+                  key={`cell-${row}-${col}`}
+                  className={`flex items-center justify-center w-9 h-9 text-sm font-bold border border-gray-400 ${openClass}`}
+                >
+                  {open ? (
+                    isMine ? (
+                      <Bomb />
                     ) : (
-                      <button onClick={e => handleOpenCell(e, cell)} className="w-9 h-9"></button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
+                      <span>{adjacentMines}</span>
+                    )
+                  ) : (
+                    <button onClick={e => handleOpenCell(e, cell)} className="w-9 h-9" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );

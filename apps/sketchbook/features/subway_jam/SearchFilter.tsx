@@ -10,8 +10,17 @@ interface SearchFilterProps {
   setJam: Dispatch<SetStateAction<Jam>>;
 }
 
+interface StationOption {
+  label: string;
+  value: string;
+}
+
+interface StationData {
+  stations: string[];
+}
+
 export default function SearchFilter({ setJam }: SearchFilterProps) {
-  const [stationOptions, setStationOptions] = useState([]);
+  const [stationOptions, setStationOptions] = useState<StationOption[]>([]);
 
   const { control, resetField } = useFormContext();
   const line = useWatch({
@@ -25,7 +34,7 @@ export default function SearchFilter({ setJam }: SearchFilterProps) {
 
   useEffect(() => {
     if (!line) return;
-    setJam(null);
+    setJam({} as Jam);
     resetField('station');
 
     (async () => {
@@ -33,10 +42,12 @@ export default function SearchFilter({ setJam }: SearchFilterProps) {
         method: 'GET',
       });
 
-      const stationOpt = data.stations.map(station => ({
-        label: station,
-        value: station,
-      }));
+      const stationOpt: StationOption[] = (data as StationData).stations.map(
+        (station: string): StationOption => ({
+          label: station,
+          value: station,
+        })
+      );
 
       setStationOptions(stationOpt);
     })();
