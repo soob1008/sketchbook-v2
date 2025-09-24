@@ -1,4 +1,4 @@
-import MinesweeperContainer from '@/features/game/minesweeper/MinesweeperContainer';
+import MinesweeperContainer from '@/features/game/minesweeper/components/MinesweeperContainer';
 import PageTitle from '@/components/ui/title';
 
 export default function Minesweeper2Page() {
