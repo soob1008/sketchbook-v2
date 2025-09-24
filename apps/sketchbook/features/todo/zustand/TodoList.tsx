@@ -17,7 +17,7 @@ export default function TodoList({ todo }: Todo) {
   const [checked, setChecked] = useState(completed);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
-  const onComplete = (e) => {
+  const onComplete = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
 
     update({ ...todo, completed: e.target.checked });
@@ -48,21 +48,20 @@ export default function TodoList({ todo }: Todo) {
   return (
     <div className="flex items-center justify-between gap-5">
       <div className="flex items-center gap-2 flex-1">
-        <Checkbox onChange={onComplete} />
+        <Checkbox
+          checked={checked}
+          onCheckedChange={(checked: boolean) =>
+            onComplete({ target: { checked } } as React.ChangeEvent<HTMLInputElement>)
+          }
+        />
         {isEditing ? (
-          <Input
-            className="w-full"
-            defaultValue={text}
-            onChange={onChangeText}
-          />
+          <Input className="w-full" defaultValue={text} onChange={onChangeText} />
         ) : (
           <p className="text-semibold text-sm">{text}</p>
         )}
       </div>
       <div className="flex items-center gap-2">
-        <Button onClick={onUpdate}>
-          {isEditing ? <PencilOff /> : <Pencil />}
-        </Button>
+        <Button onClick={onUpdate}>{isEditing ? <PencilOff /> : <Pencil />}</Button>
         <Button onClick={onRemove}>
           <CircleX />
         </Button>

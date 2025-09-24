@@ -3,6 +3,7 @@ import { Card, CardContent } from '@workspace/ui/components/card';
 import { Button } from '@workspace/ui/components/button';
 import PageTitle from '@/components/ui/title';
 import { fetchData } from '@/lib/api/apiClient';
+import type { Post } from '@/app/board/[id]/edit/page';
 
 export default async function BoardPage() {
   const { data: posts } = await fetchData(`/api/posts`, {
@@ -26,7 +27,7 @@ export default async function BoardPage() {
         <p className="text-gray-500">아직 작성된 게시글이 없습니다.</p>
       ) : (
         <div className="flex flex-col gap-4">
-          {posts.map(post => (
+          {posts.map((post: Post) => (
             <Link href={`/board/${post.id}`} key={post.id}>
               <Card className="cursor-pointer hover:shadow-md transition">
                 <CardContent className="p-4 space-y-1">

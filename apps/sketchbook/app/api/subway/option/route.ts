@@ -8,14 +8,12 @@ export async function GET(req: NextRequest) {
 
     const stations = new Set(
       subwayJamData
-        .filter((item) => String(item['호선']) === line)
-        .map((item) => item['출발역'])
+        .filter(item => String(item['호선']) === line)
+        .map(item => item['출발역'])
         .sort((a, b) => a.localeCompare(b))
     );
 
-    const times = Object.keys(subwayJamData[0]).filter((key) =>
-      /^[0-9]{1,2}시[0-9]{2}분$/.test(key)
-    );
+    const times = Object.keys(subwayJamData[0] as object).filter(key => /^[0-9]{1,2}시[0-9]{2}분$/.test(key));
 
     return NextResponse.json({
       stations: [...stations],
@@ -23,9 +21,6 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching RSS feed:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch RSS feed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch RSS feed' }, { status: 500 });
   }
 }

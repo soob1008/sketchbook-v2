@@ -1,5 +1,5 @@
 // 지하철 노선도 컬러
-export function getSubwayLineColor(line) {
+export function getSubwayLineColor(line: number) {
   switch (line) {
     case 1:
       return '#00498B';

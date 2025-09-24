@@ -1,16 +1,15 @@
 'use client';
 
 import PageTitle from '@/components/ui/title';
-import SearchFilter from '@/components/feature/subway_jam/SearchFilter';
-import SubwayCarJam from '@/components/feature/subway_jam/SubwayCarJam';
-import SubwayPassengerFlow from '@/components/feature/subway_jam/SubwayPassengerFlow';
+import SearchFilter from '@/features/subway_jam/SearchFilter';
+import SubwayCarJam from '@/features/subway_jam/SubwayCarJam';
 import { FormProvider, useForm } from 'react-hook-form';
 import { fetchData } from '@/lib/api/apiClient';
 import { useState } from 'react';
-import { Jam } from '@/components/feature/subway_jam/type';
+import { Jam } from '@/features/subway_jam/type';
 
 export default function SubwayJamPage() {
-  const [jam, setJam] = useState<Jam>();
+  const [jam, setJam] = useState<Jam>({} as Jam);
   const form = useForm({
     defaultValues: {
       line: '',
@@ -53,8 +52,8 @@ export default function SubwayJamPage() {
         </form>
 
         <div className=" mt-10">
-          <SubwayCarJam jam={jam} />
-          <SubwayPassengerFlow />
+          {jam && <SubwayCarJam jam={jam} />}
+          {/* <SubwayPassengerFlow /> */}
         </div>
       </FormProvider>
     </div>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@workspace/ui/components/card';
 import { fetchData } from '@/lib/api/apiClient';
 import { Button } from '@workspace/ui/components/button';
-import PostDeleteButton from '@/components/feature/board/PostDeleteButton';
+import PostDeleteButton from '@/features/board/PostDeleteButton';
 
 export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

@@ -5,7 +5,9 @@
     "baseUrl": ".",
     "paths": {
       "@workspace/ui/*": ["./src/*"]
-    }
+    },
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["."],
   "exclude": ["node_modules", "dist"]
